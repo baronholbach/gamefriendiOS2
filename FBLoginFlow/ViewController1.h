@@ -7,10 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
+@class GamerTokens;
+@class XBViewController1;
+@class PSViewController;
+@class settingsViewController;
 
 
-
-@interface ViewController1 : UIViewController <UIPickerViewDataSource,UIPickerViewDelegate>
+@interface ViewController1 : UIViewController <UIPickerViewDataSource,UIPickerViewDelegate, NSXMLParserDelegate>
+{
+    // web service related objects
+    NSURLConnection *connection;
+    NSMutableData *xmlData;
+    GamerTokens *tokenData;
+    
+    // view controllers
+    XBViewController1 *xvc;
+    PSViewController *pvc;
+    settingsViewController *svc;
+}
 
 @property (weak, nonatomic) IBOutlet UILabel *uiLabel;
 
@@ -31,7 +45,7 @@
 - (IBAction)confirmPressed:(id)sender;
 - (IBAction)nextPressed:(id)sender;
 - (void)xboxPicked;
-
+- (void)fetchGamerTokens;
 
 
 @end

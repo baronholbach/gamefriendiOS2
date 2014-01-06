@@ -9,8 +9,6 @@
 #import "AppDelegate.h"
 #import <FacebookSDK/FacebookSDK.h>
 
-#import "ViewController1.h"
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -21,7 +19,9 @@
     [FBLoginView class];
     NSSet* set = [NSSet setWithObjects:FBLoggingBehaviorFBRequests, nil];
     [FBSettings setLoggingBehavior:set];
- 
+
+    
+    
     return YES;
 }
 

@@ -12,10 +12,9 @@
 #import "XBViewController1.h"
 #import "PSViewController.h"
 #import "settingsViewController.h"
-
+#import "GamerTokens.h"
 
 @interface ViewController1 () <FBLoginViewDelegate, UITextFieldDelegate>
-
 @end
 
 @implementation ViewController1
@@ -23,7 +22,7 @@
 
 int i = 0;
 int currentSeq = 0;
-//XXX
+
 
 - (void)viewDidLoad
 {
@@ -34,29 +33,41 @@ int currentSeq = 0;
     loginView.readPermissions = @[@"basic_info"];
     loginView.delegate = self;
     loginView.center = CGPointMake(160,330);
-
+ 
     self.networkOptions  = [[NSArray alloc] initWithObjects:@"Xbox Live",@"PlayStation Network",@"Both", nil];
-    }
     
+    // initialize view controllers
+    xvc =[[XBViewController1 alloc] init];
+    pvc = [[PSViewController alloc]  init];
+    svc =[[settingsViewController alloc] init];
+}
+
 
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView {
     
+    //fetch gamer tokens from web service
+    if (self) {
+            [self fetchGamerTokens];
+    }
+    
+    
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
-    if (![setting objectForKey:@"intro"]) {
-    [FBLoginView class];
-    NSSet* set = [NSSet setWithObjects:FBLoggingBehaviorFBRequests, nil];
-    [FBSettings setLoggingBehavior:set];
+    
+    
+    if (![setting objectForKey:@"intro"]) {   //Before you have gone through intro
     loginView.hidden = 1;
     _uiLabel.hidden = 0;
     }
     
     else {
-        NSUserDefaults *setting = [[NSUserDefaults alloc] init];
-        int network = [setting objectForKey:@"networks"];
         
-        XBViewController1 *xvc =[[XBViewController1 alloc] init];
-        PSViewController *pvc = [[PSViewController alloc]  init];
-        settingsViewController *svc =[[settingsViewController alloc] init];
+        
+        NSUserDefaults *setting = [[NSUserDefaults alloc] init];
+        int network = [setting integerForKey:@"networks"];
+
+        NSLog(@"%d", network);
+        
+        
         
         
         UITabBarController *tbc = [[UITabBarController alloc] init];
@@ -64,32 +75,33 @@ int currentSeq = 0;
         
         switch (network) {
             
-        case 0:
+        case 0:  //Xbox ONLY
             {
                 UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
                 nav.navigationBar.hidden = YES;
                 NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, svc, nil];
                 [tbc setViewControllers:viewControllers animated:NO];
                 [self presentViewController:nav animated:NO completion:NULL];
+      
             }
         break;
             
-            case 1:
+            case 1:  //PS ONLY
             {
                 NSArray *viewControllers = [[NSArray alloc] initWithObjects:pvc, svc, nil];
                 [tbc setViewControllers:viewControllers animated:NO];
                 [self presentViewController:tbc animated:NO completion:NULL];
-                NSUserDefaults *setting = [[NSUserDefaults alloc] init];
+
 
             }
             break;
                 
-            case 3:
+            case 3:  //BOTH Networks
             {
                 NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, pvc, svc, nil];
                 [tbc setViewControllers:viewControllers animated:NO];
                 [self presentViewController:tbc animated:NO completion:NULL];
-                NSUserDefaults *setting = [[NSUserDefaults alloc] init];
+
                 break;
             }
             
@@ -201,7 +213,7 @@ int currentSeq = 0;
 }
     
     
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {  //User selecting their game networks during intro
     
     switch (row) {
         case 0:
@@ -264,13 +276,14 @@ int currentSeq = 0;
 }
 
 
--(IBAction)confirmPressed:(id)sender  {
+-(IBAction)confirmPressed:(id)sender  {  //Entered your game network username, intro sequence
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
     [setting setObject:@"1" forKey:@"intro"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     XBViewController1 *xvc =[[XBViewController1 alloc] init];
     PSViewController *pvc = [[PSViewController alloc]  init];
     settingsViewController *svc =[[settingsViewController alloc] init];
+    
 
     
     UITabBarController *tbc = [[UITabBarController alloc] init];
@@ -280,7 +293,7 @@ int currentSeq = 0;
         [tbc setViewControllers:viewControllers animated:NO];
         [self presentViewController:tbc animated:YES completion:NULL];
         NSUserDefaults *setting = [[NSUserDefaults alloc] init];
-        [setting setObject:@"3" forKey:@"networks"];
+        [setting setInteger:3 forKey:@"networks"];
     }
     
     else if (currentSeq == 1)
@@ -289,16 +302,22 @@ int currentSeq = 0;
         [tbc setViewControllers:viewControllers animated:NO];
         [self presentViewController:tbc animated:YES completion:NULL];
         NSUserDefaults *setting = [[NSUserDefaults alloc] init];
-        [setting setObject:@"1" forKey:@"networks"];
+        [setting setInteger:1 forKey:@"networks"];
     }
     
     else if (currentSeq == 0)
     {
-        NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, svc, nil];
-        [tbc setViewControllers:viewControllers animated:NO];
-        [self presentViewController:tbc animated:YES completion:NULL];
         NSUserDefaults *setting = [[NSUserDefaults alloc] init];
-        [setting setObject:@"0" forKey:@"networks"];
+        [setting setInteger:0 forKey:@"networks"];
+
+        
+        NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, svc, nil];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
+        nav.navigationBar.hidden = YES;
+        [tbc setViewControllers:viewControllers animated:NO];
+        
+         [self presentViewController:nav animated:NO completion:NULL];
+
     }
     
 
@@ -356,6 +375,90 @@ int currentSeq = 0;
             _xbEntry.frame = CGRectOffset(_xbEntry.frame, -485, 0);
         }];
     }
+}
+
+
+/////////////////////////////////////
+// Web service methods
+////////////////////////////////////
+
+// function to get gamer tokens from web service
+- (void)fetchGamerTokens
+{
+    // initialize holder for data coming back from server
+    xmlData = [[NSMutableData alloc] init];
+    
+    //construct an URL
+    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1/GameFinder/getUserList.php"];
+    
+    //Put the URL into an USURLRequest
+    NSURLRequest *req = [NSURLRequest requestWithURL: url];
+    
+    //Create a connection
+    connection = [[NSURLConnection alloc] initWithRequest:req delegate:self startImmediately:YES];
+}
+
+
+-(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data
+{
+    [xmlData appendData:data];
+    
+}
+
+// function called when finishing receiving data from web service
+-(void)connectionDidFinishLoading:(NSURLConnection *)conn
+{
+    // For testing only: log xml data received from web service
+    // NSString *xmlCheck = [[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding];
+    // NSLog(@"xmlCheck = %@", xmlCheck);
+    
+    // Create the parser object with the data received from the web service
+    NSXMLParser *parser = [[NSXMLParser alloc] initWithData:xmlData];
+    
+    [parser setDelegate:self];
+    
+    [parser parse];
+    
+    xmlData = nil;
+    
+    connection = nil;
+    
+    
+    // set token data on view controller
+    // TO DO: Need to do similar work for playstation view controller
+    xvc.tokenData = tokenData;
+    
+    [xvc loadData];
+}
+
+// function called when fail to web service
+-(void)connection:(NSURLConnection *)conn didFailWithError:(NSError *)error
+{
+    connection = nil;
+    xmlData = nil;
+    
+    // show alert view
+    NSString *errorString = [NSString stringWithFormat:@"Fetch failed: %@", [error localizedDescription]];
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [av show];
+}
+
+/////////////////////////////////////////////////
+// NSXMLParserDelegate method overrides
+/////////////////////////////////////////////////
+-(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
+{
+    NSLog(@"%@ found a %@ element", self, elementName);
+    
+    if ([elementName isEqual:@"gamertokens"])
+    {
+        tokenData = [[GamerTokens alloc] init];
+        
+        [tokenData setParentParserDelegate:self];  // Give channel object a pointer back to ListViewController(self) for later
+        
+        [parser setDelegate:tokenData];
+    }
+
 }
 
 @end

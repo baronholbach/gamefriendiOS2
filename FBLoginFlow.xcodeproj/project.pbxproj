@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0545B5EA1878B09E00325E36 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0545B5E91878B09E00325E36 /* FacebookSDK.framework */; };
+		05A458E4187A4FD8007F0DD2 /* GamerTokens.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A458E3187A4FD8007F0DD2 /* GamerTokens.m */; };
+		05A458E7187A55AA007F0DD2 /* GamerToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A458E6187A55AA007F0DD2 /* GamerToken.m */; };
 		05E288F118144EB500C612DD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E288F018144EB500C612DD /* UIKit.framework */; };
 		05E288F318144EB500C612DD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E288F218144EB500C612DD /* Foundation.framework */; };
 		05E288F518144EB500C612DD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E288F418144EB500C612DD /* CoreGraphics.framework */; };
@@ -24,7 +27,6 @@
 		05E2891A18144EE900C612DD /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E2891918144EE900C612DD /* libsqlite3.dylib */; };
 		05E2891C18144EEF00C612DD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E2891B18144EEF00C612DD /* CoreLocation.framework */; };
 		05E2892018144F1500C612DD /* FBUserSettingsViewResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 05E2891F18144F1500C612DD /* FBUserSettingsViewResources.bundle */; };
-		0628FD8D185542E300D591A3 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0628FD8C185542E300D591A3 /* FacebookSDK.framework */; };
 		063534771874836E007B7EF2 /* xbox_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 063534761874836E007B7EF2 /* xbox_bg.png */; };
 		063534791874837C007B7EF2 /* psn_bg2.png in Resources */ = {isa = PBXBuildFile; fileRef = 063534781874837C007B7EF2 /* psn_bg2.png */; };
 		0635347B18748447007B7EF2 /* XboxLIVE_RGBvectorKO_horizontal_2013.png in Resources */ = {isa = PBXBuildFile; fileRef = 0635347A18748447007B7EF2 /* XboxLIVE_RGBvectorKO_horizontal_2013.png */; };
@@ -50,6 +52,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0545B5E91878B09E00325E36 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
+		05A458E2187A4FD8007F0DD2 /* GamerTokens.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GamerTokens.h; sourceTree = "<group>"; };
+		05A458E3187A4FD8007F0DD2 /* GamerTokens.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GamerTokens.m; sourceTree = "<group>"; };
+		05A458E5187A55AA007F0DD2 /* GamerToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GamerToken.h; sourceTree = "<group>"; };
+		05A458E6187A55AA007F0DD2 /* GamerToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GamerToken.m; sourceTree = "<group>"; };
 		05E288EC18144EB500C612DD /* FBLoginFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FBLoginFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05E288F018144EB500C612DD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		05E288F218144EB500C612DD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -71,9 +78,8 @@
 		05E2891718144EE000C612DD /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		05E2891918144EE900C612DD /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		05E2891B18144EEF00C612DD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		05E2891F18144F1500C612DD /* FBUserSettingsViewResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FBUserSettingsViewResources.bundle; path = ../../Documents/FacebookSDK/FacebookSDK.framework/Versions/A/Resources/FBUserSettingsViewResources.bundle; sourceTree = "<group>"; };
+		05E2891F18144F1500C612DD /* FBUserSettingsViewResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FBUserSettingsViewResources.bundle; path = ../../FacebookSDK/FacebookSDK.framework/Versions/A/Resources/FBUserSettingsViewResources.bundle; sourceTree = "<group>"; };
 		05E28922181497FD00C612DD /* FriendProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FriendProtocols.h; sourceTree = "<group>"; };
-		0628FD8C185542E300D591A3 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		063534761874836E007B7EF2 /* xbox_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xbox_bg.png; sourceTree = "<group>"; };
 		063534781874837C007B7EF2 /* psn_bg2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = psn_bg2.png; sourceTree = "<group>"; };
 		0635347A18748447007B7EF2 /* XboxLIVE_RGBvectorKO_horizontal_2013.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = XboxLIVE_RGBvectorKO_horizontal_2013.png; sourceTree = "<group>"; };
@@ -115,9 +121,9 @@
 				05E2891818144EE000C612DD /* AdSupport.framework in Frameworks */,
 				05E2891618144ED800C612DD /* Social.framework in Frameworks */,
 				05E2891418144ED100C612DD /* Accounts.framework in Frameworks */,
+				0545B5EA1878B09E00325E36 /* FacebookSDK.framework in Frameworks */,
 				05E288F118144EB500C612DD /* UIKit.framework in Frameworks */,
 				05E288F318144EB500C612DD /* Foundation.framework in Frameworks */,
-				0628FD8D185542E300D591A3 /* FacebookSDK.framework in Frameworks */,
 				05E288F518144EB500C612DD /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -145,8 +151,8 @@
 		05E288EF18144EB500C612DD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0545B5E91878B09E00325E36 /* FacebookSDK.framework */,
 				0635347C1874A493007B7EF2 /* QuartzCore.framework */,
-				0628FD8C185542E300D591A3 /* FacebookSDK.framework */,
 				05E2891B18144EEF00C612DD /* CoreLocation.framework */,
 				05E2891918144EE900C612DD /* libsqlite3.dylib */,
 				05E2891518144ED800C612DD /* Social.framework */,
@@ -163,26 +169,30 @@
 		05E288F618144EB500C612DD /* FBLoginFlow */ = {
 			isa = PBXGroup;
 			children = (
-				066C93F818765C97005A365F /* XBSelectedRow.h */,
-				066C93F918765C97005A365F /* XBSelectedRow.m */,
-				066C93FA18765C97005A365F /* XBSelectedRow.xib */,
+				05E288FF18144EB500C612DD /* AppDelegate.h */,
+				05E2890018144EB500C612DD /* AppDelegate.m */,
+				05E2890B18144EB500C612DD /* ViewController1.h */,
+				05E2890C18144EB500C612DD /* ViewController1.m */,
+				05E2890818144EB500C612DD /* MainStoryboard.storyboard */,
 				06E70FED1867F22A00D58961 /* PSViewController.h */,
 				06E70FEE1867F22A00D58961 /* PSViewController.m */,
 				06E70FEA1867F19F00D58961 /* XBViewController1.h */,
 				06E70FEB1867F19F00D58961 /* XBViewController1.m */,
-				05E288FF18144EB500C612DD /* AppDelegate.h */,
-				05E2890018144EB500C612DD /* AppDelegate.m */,
 				06B9434B185D7AEA007B0D1E /* settingsViewController.h */,
 				06B9434C185D7AEA007B0D1E /* settingsViewController.m */,
 				06B9434D185D7AEA007B0D1E /* settingsViewController.xib */,
-				05E2890818144EB500C612DD /* MainStoryboard.storyboard */,
-				05E2890B18144EB500C612DD /* ViewController1.h */,
-				05E2890C18144EB500C612DD /* ViewController1.m */,
+				066C93F818765C97005A365F /* XBSelectedRow.h */,
+				066C93F918765C97005A365F /* XBSelectedRow.m */,
+				066C93FA18765C97005A365F /* XBSelectedRow.xib */,
 				066C93FD1878630F005A365F /* DBConnectionManager.h */,
 				066C93FE1878630F005A365F /* DBConnectionManager.m */,
 				05E288F718144EB500C612DD /* Supporting Files */,
 				06724E4F185EA01C003A3CA0 /* xboxTestViewController.h */,
 				06724E50185EA01C003A3CA0 /* xboxTestViewController.m */,
+				05A458E2187A4FD8007F0DD2 /* GamerTokens.h */,
+				05A458E3187A4FD8007F0DD2 /* GamerTokens.m */,
+				05A458E5187A55AA007F0DD2 /* GamerToken.h */,
+				05A458E6187A55AA007F0DD2 /* GamerToken.m */,
 			);
 			path = FBLoginFlow;
 			sourceTree = "<group>";
@@ -313,8 +323,10 @@
 				06B9434E185D7AEA007B0D1E /* settingsViewController.m in Sources */,
 				05E2890118144EB500C612DD /* AppDelegate.m in Sources */,
 				05E2890D18144EB500C612DD /* ViewController1.m in Sources */,
+				05A458E4187A4FD8007F0DD2 /* GamerTokens.m in Sources */,
 				066C93FB18765C97005A365F /* XBSelectedRow.m in Sources */,
 				06E70FEC1867F19F00D58961 /* XBViewController1.m in Sources */,
+				05A458E7187A55AA007F0DD2 /* GamerToken.m in Sources */,
 				06E70FEF1867F22A00D58961 /* PSViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,9 +408,10 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/../../../FacebookSDK\\\"",
-					"\\\"$(SRCROOT)/../../FacebookSDK\\\"",
+					"\\\\\\\"$(SRCROOT)/../../../FacebookSDK\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../../FacebookSDK\\\\\\\"",
 					/Users/tompkins/Documents/FacebookSDK,
+					/Users/TracyLiu/Documents/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FBLoginFlow/FBLoginFlow-Prefix.pch";
@@ -414,9 +427,10 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\"$(SRCROOT)/../../../FacebookSDK\\\"",
-					"\\\"$(SRCROOT)/../../FacebookSDK\\\"",
+					"\\\\\\\"$(SRCROOT)/../../../FacebookSDK\\\\\\\"",
+					"\\\\\\\"$(SRCROOT)/../../FacebookSDK\\\\\\\"",
 					/Users/tompkins/Documents/FacebookSDK,
+					/Users/TracyLiu/Documents/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FBLoginFlow/FBLoginFlow-Prefix.pch";

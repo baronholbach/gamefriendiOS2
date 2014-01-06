@@ -14,9 +14,10 @@
 
 @end
 
+
 @implementation XBViewController1
 
-
+@synthesize tokenData;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -47,7 +48,7 @@
     
     request.parameters[@"fields"] =
     [NSString stringWithFormat:@"%@, installed",request.parameters[@"fields"]];
-
+    
   
     
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -116,15 +117,18 @@
 }
 
 
-
 - (BOOL)friendPickerViewController:(FBFriendPickerViewController *)friendPicker shouldIncludeUser:(id<FBGraphUserExtraFields>)user
 {
+    //NSLog(@"XXXX%@",self.tokenData );
 
     // Loop through list of devices for the friend
+    if ( [user.id])
+    
+    
     
     if ([user.last_name characterAtIndex:0] >= (int)'M') {
     
-
+    
 
             return YES;
         }

@@ -5,44 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>DA7BD4AD-C128-41E3-AE51-EA6808D8B01F</string>
+	<string>4EA0C7CD-70D5-45A1-A61D-4BB8380654BF</string>
 	<key>IDESourceControlProjectName</key>
 	<string>FBLoginFlow</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>93D12837-301E-4B07-AFBE-5E2E5C234339</key>
-		<string>https://github.com/baronholbach/gamefriendios.git</string>
+		<key>FE9B0D08-95F0-47BE-825E-14037E2178CC</key>
+		<string>https://github.com/baronholbach/gamefriendiOS2.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>FBLoginFlow.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>93D12837-301E-4B07-AFBE-5E2E5C234339</key>
-		<string>../../../mlb resources/personal/untitled folder/github/gameff.png</string>
+		<key>FE9B0D08-95F0-47BE-825E-14037E2178CC</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/baronholbach/gamefriendios.git</string>
+	<string>https://github.com/baronholbach/gamefriendiOS2.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>93D12837-301E-4B07-AFBE-5E2E5C234339</string>
+	<string>FE9B0D08-95F0-47BE-825E-14037E2178CC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>93D12837-301E-4B07-AFBE-5E2E5C234339</string>
+			<string>FE9B0D08-95F0-47BE-825E-14037E2178CC</string>
 			<key>IDESourceControlWCCName</key>
-			<string>gamefriendios</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>93D12837-301E-4B07-AFBE-5E2E5C234339</string>
-			<key>IDESourceControlWCCName</key>
-			<string>gamefriendios</string>
+			<string>gamefriendiOS2</string>
 		</dict>
 	</array>
 </dict>
