@@ -119,7 +119,7 @@
 
 - (BOOL)friendPickerViewController:(FBFriendPickerViewController *)friendPicker shouldIncludeUser:(id<FBGraphUserExtraFields>)user
 {
-    //NSLog(@"XXXX%@",self.tokenData );
+    NSLog(@"XXXX%@",self.tokenData );
 
     // Loop through list of devices for the friend
     // if ( [user.id])

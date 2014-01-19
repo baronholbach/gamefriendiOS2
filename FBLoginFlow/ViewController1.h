@@ -50,6 +50,7 @@
 -(void)psPicked;
 - (void)fetchGamerTokens;
 - (void)xboxBack;
+- (void)psBack;
 
 
 @end

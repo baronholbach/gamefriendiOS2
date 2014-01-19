@@ -56,9 +56,9 @@ int currentSeq = 0;
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView {
     
     //fetch gamer tokens from web service
-    /*if (self) {
+    if (self) {
             [self fetchGamerTokens];
-    }*/
+    }
     
     
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
@@ -302,7 +302,7 @@ int currentSeq = 0;
     
     
     [[NSUserDefaults standardUserDefaults] synchronize];
-    XBViewController1 *xvc =[[XBViewController1 alloc] init];
+
     PSViewController *pvc = [[PSViewController alloc]  init];
     settingsViewController *svc =[[settingsViewController alloc] init];
     
@@ -413,8 +413,16 @@ int currentSeq = 0;
     [UIView animateWithDuration:0.5 animations:^{
         self.networkPicker.frame = CGRectOffset(self.networkPicker.frame, -480, 0);
         _psEntry.frame = CGRectOffset(_psEntry.frame, -520, 0);
-        _psLabel.frame = CGRectOffset(_psLabel.frame, -468, 0);
+        _psLabel.frame = CGRectOffset(_psLabel.frame, -470, 0);
+        
+        self.navBar.hidden = 0;
+        
+    
     }];
+        
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(psBack)];
+    [_navItem setLeftBarButtonItem:backButton];
+        
     }
     
     else {
@@ -428,6 +436,22 @@ int currentSeq = 0;
 }
 
 
+- (void)psBack {
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        _networkPicker.frame = CGRectOffset(_networkPicker.frame, 480, 0);
+        _psEntry.frame = CGRectOffset(_psEntry.frame, 515, 0);
+        _psLabel.frame = CGRectOffset(_psLabel.frame, 485, 0);
+        _uiLabel.frame = CGRectOffset(_uiLabel.frame, 485, 0);
+        
+        
+    }];
+    
+    [_psEntry resignFirstResponder];
+    self.navBar.hidden = 1;
+    
+}
+
 /////////////////////////////////////
 // Web service methods
 ////////////////////////////////////
@@ -439,7 +463,7 @@ int currentSeq = 0;
     xmlData = [[NSMutableData alloc] init];
     
     //construct an URL
-    NSURL *url = [NSURL URLWithString:@"http://127.0.0.1/GameFinder/getUserList.php"];
+    NSURL *url = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getUserList.php"];
     
     //Put the URL into an USURLRequest
     NSURLRequest *req = [NSURLRequest requestWithURL: url];
