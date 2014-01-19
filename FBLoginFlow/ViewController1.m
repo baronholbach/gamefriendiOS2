@@ -27,6 +27,16 @@ int currentSeq = 0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
+    _navBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
+            [self.view addSubview:_navBar];
+    _navBar.hidden = 1;
+    _navItem = [[UINavigationItem alloc] initWithTitle:@""];
+    [_navBar pushNavigationItem:_navItem animated:YES];
+    [_navBar setBackgroundColor:[UIColor orangeColor]];
+
+    
 	// Do any additional setup after loading the view, typically from a nib.
     
     FBLoginView* loginView = [[FBLoginView alloc]init];
@@ -46,9 +56,9 @@ int currentSeq = 0;
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView {
     
     //fetch gamer tokens from web service
-    if (self) {
+    /*if (self) {
             [self fetchGamerTokens];
-    }
+    }*/
     
     
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
@@ -215,11 +225,13 @@ int currentSeq = 0;
     
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {  //User selecting their game networks during intro
     
+    
     switch (row) {
         case 0:
+        {
             [self xboxPicked];
             currentSeq = 0;
-            
+        }
         break;
     
     
@@ -252,9 +264,14 @@ int currentSeq = 0;
     
     if (currentSeq == 2)
         _nextButton.hidden = NO;
-    else
-        _confirmButton.hidden = NO;
     
+    
+    else {
+    
+        
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(confirmPressed:)];
+    [_navItem setRightBarButtonItem:doneButton];
+    }
     
     if (currentSeq == 1 || currentSeq  == 3) {
         NSUserDefaults *setting = [[NSUserDefaults alloc] init];
@@ -268,7 +285,6 @@ int currentSeq = 0;
         
         
     }
-    _networkPicker.hidden = YES;
     [textField resignFirstResponder];
 
 
@@ -278,7 +294,13 @@ int currentSeq = 0;
 
 -(IBAction)confirmPressed:(id)sender  {  //Entered your game network username, intro sequence
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
-    [setting setObject:@"1" forKey:@"intro"];
+    
+    //////COMMENTED OUT FOR DEV PURPOSES.  REMOVE COMMENT//////
+    //[setting setObject:@"1" forKey:@"intro"];
+    //////////////////////////////////////////////////////
+    
+    
+    
     [[NSUserDefaults standardUserDefaults] synchronize];
     XBViewController1 *xvc =[[XBViewController1 alloc] init];
     PSViewController *pvc = [[PSViewController alloc]  init];
@@ -342,18 +364,46 @@ int currentSeq = 0;
 
 -(void)xboxPicked {
     
-
     
     [UIView animateWithDuration:0.5 animations:^{
         
-        _networkPicker.frame = CGRectOffset(_networkPicker.frame, -480, 0);
-       _xbEntry.frame = CGRectOffset(_xbEntry.frame, -515, 0);
+    _networkPicker.frame = CGRectOffset(_networkPicker.frame, -480, 0);
+    _xbEntry.frame = CGRectOffset(_xbEntry.frame, -515, 0);
     _xbLabel.frame = CGRectOffset(_xbLabel.frame, -485, 0);
+    _uiLabel.frame = CGRectOffset(_uiLabel.frame, -485, 0);
+        
+        
 
     }];
-    self.uiLabel.hidden = 1;
+    
 
+    self.navBar.hidden = 0;
+
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(xboxBack)];
+    [_navItem setLeftBarButtonItem:backButton];
+    
 }
+
+
+-(void)xboxBack{
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        _networkPicker.frame = CGRectOffset(_networkPicker.frame, 480, 0);
+        _xbEntry.frame = CGRectOffset(_xbEntry.frame, 515, 0);
+        _xbLabel.frame = CGRectOffset(_xbLabel.frame, 485, 0);
+        _uiLabel.frame = CGRectOffset(_uiLabel.frame, 485, 0);
+        
+        
+    }];
+
+    [_xbEntry resignFirstResponder];
+    self.navBar.hidden = 1;
+    
+}
+
+
 
 -(void)psPicked {
     self.uiLabel.hidden = 1;

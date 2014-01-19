@@ -122,7 +122,7 @@
     //NSLog(@"XXXX%@",self.tokenData );
 
     // Loop through list of devices for the friend
-    if ( [user.id])
+    // if ( [user.id])
     
     
     

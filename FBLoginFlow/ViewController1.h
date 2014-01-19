@@ -34,6 +34,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *psEntry;
 @property (weak, nonatomic) IBOutlet UILabel *xbLabel;
 @property (weak, nonatomic) IBOutlet UILabel *psLabel;
+@property UINavigationBar *navBar;
+@property UINavigationItem *navItem;
 
 
 @property (strong, nonatomic) NSArray *networkOptions;
@@ -45,7 +47,9 @@
 - (IBAction)confirmPressed:(id)sender;
 - (IBAction)nextPressed:(id)sender;
 - (void)xboxPicked;
+-(void)psPicked;
 - (void)fetchGamerTokens;
+- (void)xboxBack;
 
 
 @end
