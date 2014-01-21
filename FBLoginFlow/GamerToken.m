@@ -27,6 +27,9 @@
     {
         currentString = [[NSMutableString alloc] init];
         [self setXBoxID:currentString];
+        
+        
+
     }
     else if ([elementName isEqual:@"PSID"])
     {

@@ -9,6 +9,8 @@
 #import "XBViewController1.h"
 #import "FriendProtocols.h"
 #import "XBSelectedRow.h"
+#import "GamerToken.h"
+#import "GamerTokens.h"
 
 @interface XBViewController1 () <UITableViewDelegate>
 
@@ -53,7 +55,8 @@
     
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         
-       for(id<FBGraphUser> user in result[@"data"])
+       /*
+        for(id<FBGraphUser> user in result[@"data"])
         {
         if ([user.last_name characterAtIndex:0] >= (int)'M') {
         
@@ -65,7 +68,7 @@
 
 
             
-        }
+        }*/
         
         //_sortedFriendInfo  = [self alphaSort:_curFriendInfo];
 
@@ -119,19 +122,28 @@
 
 - (BOOL)friendPickerViewController:(FBFriendPickerViewController *)friendPicker shouldIncludeUser:(id<FBGraphUserExtraFields>)user
 {
-    NSLog(@"XXXX%@",self.tokenData );
+    //NSLog(@"%@", _tokenData.tokens[0]);
 
     // Loop through list of devices for the friend
     // if ( [user.id])
-    
-    
-    
-    if ([user.last_name characterAtIndex:0] >= (int)'M') {
-    
-    
 
-            return YES;
+
+    
+    for (GamerToken *token in [self tokenData].tokens) {
+
+        
+        if ([user.id isEqualToString:token.FaceBookID]) {
+
+            if (![token.XBoxID isEqualToString:@""]){
+                NSString *curName = [[NSString alloc] initWithFormat:@"%@, %@, %@", user.last_name, user.name, user.id];
+            
+                [_sortedFriendInfo addObject:curName];
+            
+                return YES;
+            }
+
         }
+    }
     
     // Friend is not an iOS user, do not include them
     return NO;
@@ -156,9 +168,10 @@
     [[self navigationController] pushViewController:xbr animated:YES];
     self.navigationController.navigationBar.hidden = 0;
     int rowTotal = 0;
-    for (int i=0; i < indexPath.section; i++) {
+    for (int i=0; i <= indexPath.section; i++) {
         rowTotal += [tableView numberOfRowsInSection:i];
     }
+
         
     NSString *selectedName = [[NSString alloc] initWithString:_sortedArray[indexPath.row+rowTotal ]];
     [xbr setMyName:[self nameSwap:selectedName]];

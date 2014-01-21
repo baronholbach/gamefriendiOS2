@@ -24,6 +24,9 @@
     XBViewController1 *xvc;
     PSViewController *pvc;
     settingsViewController *svc;
+    NSMutableArray *searchArray;
+    
+    NSMutableString *searchIDs;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *uiLabel;

@@ -13,6 +13,7 @@
 #import "PSViewController.h"
 #import "settingsViewController.h"
 #import "GamerTokens.h"
+#import "GamerToken.h"
 
 @interface ViewController1 () <FBLoginViewDelegate, UITextFieldDelegate>
 @end
@@ -50,15 +51,44 @@ int currentSeq = 0;
     xvc =[[XBViewController1 alloc] init];
     pvc = [[PSViewController alloc]  init];
     svc =[[settingsViewController alloc] init];
+    
 }
 
 
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView {
     
-    //fetch gamer tokens from web service
-    if (self) {
+    
+    FBRequest* request = [FBRequest requestForMyFriends];
+    searchIDs =  [[NSMutableString alloc] init];
+    
+    [searchIDs appendString:@"name="];
+    searchArray = [[NSMutableArray alloc] init];
+    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        for(id<FBGraphUser> user in result[@"data"])
+        {
+
+            [searchArray addObject:user.id];
+            [searchIDs appendFormat:@"\"%@\"", user.id];
+            [searchIDs appendString:@","];
+        
+        }
+        
+        if ([searchIDs length] > 0) {
+ 
+            [searchIDs deleteCharactersInRange:NSMakeRange([searchIDs length] - 1, 1)];
+        }
+
+
+        if (self) {
             [self fetchGamerTokens];
-    }
+        }
+        
+    }];
+
+    
+    
+    //fetch gamer tokens from web service
+
     
     
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
@@ -459,14 +489,21 @@ int currentSeq = 0;
 // function to get gamer tokens from web service
 - (void)fetchGamerTokens
 {
+    
     // initialize holder for data coming back from server
     xmlData = [[NSMutableData alloc] init];
+    
     
     //construct an URL
     NSURL *url = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getUserList.php"];
     
     //Put the URL into an USURLRequest
-    NSURLRequest *req = [NSURLRequest requestWithURL: url];
+    NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
+    
+    [req setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    [req setHTTPMethod:@"POST"];
+    [req setHTTPBody:[NSData dataWithBytes:[searchIDs UTF8String] length:strlen([searchIDs UTF8String])]];
     
     //Create a connection
     connection = [[NSURLConnection alloc] initWithRequest:req delegate:self startImmediately:YES];
@@ -500,8 +537,16 @@ int currentSeq = 0;
     
     // set token data on view controller
     // TO DO: Need to do similar work for playstation view controller
-    xvc.tokenData = tokenData;
+    [xvc setTokenData:tokenData];
     
+    NSLog(@"Count: %d", tokenData.tokens.count);
+    for( int i=0; i<tokenData.tokens.count; i++)
+    {
+        GamerToken *tempToken = tokenData.tokens[i];
+        NSLog(@"%@", tempToken.XBoxID);
+    }
+
+
     [xvc loadData];
 }
 

@@ -98,7 +98,7 @@
     
     // Loop through list of devices for the friend
     // Check if there is a device match
-    if ([user.last_name characterAtIndex:0] <= (int)'M') {
+    if ([user.id characterAtIndex:0] <= (int)'M') {
         // Friend is an iOS user, include them in the display
         
         return YES;

@@ -11,6 +11,7 @@
 
 @protocol FBGraphUserExtraFields <FBGraphUser>
 
-@property (nonatomic, retain) NSArray *devices;
+@property (nonatomic, retain) NSString *xbid;
+@property (nonatomic, retain) NSString *psid;
 
 @end
