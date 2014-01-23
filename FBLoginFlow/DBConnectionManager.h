@@ -12,7 +12,7 @@
 
 @property NSString *curUserId;
 
-- (void)sendDataToField:(id)data:(id)field;
+- (void)sendData:(id)data toField:(id)field;
 - (id) pullDataFromField:(id)field;
 
 @end

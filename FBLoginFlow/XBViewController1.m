@@ -44,12 +44,11 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-
-    
+ 
     FBRequest* request = [FBRequest requestForMyFriends];
     
-    request.parameters[@"fields"] =
-    [NSString stringWithFormat:@"%@, installed",request.parameters[@"fields"]];
+   // request.parameters[@"fields"] =
+   // [NSString stringWithFormat:@"%@, installed",request.parameters[@"fields"]];
     
   
     
@@ -72,18 +71,22 @@
         
         //_sortedFriendInfo  = [self alphaSort:_curFriendInfo];
 
-        _sortedArray = [[NSArray alloc] initWithArray:[_sortedFriendInfo sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]];
+
            //NSLog(@"%@", _sortedArray);
        // _finalSortedFriendInfo = [self nameSwap:_sortedArray];
+    
+        _sortedArray = [[NSArray alloc] initWithArray:[_sortedFriendInfo sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]];
+
         
+    
         
-        
-        
-        for(id username in _sortedFriendInfo) {
+       for(id username in _sortedFriendInfo) {
 
         }
     }];
 
+
+    
     [self setSortOrdering:FBFriendSortByLastName];
     
     self.cancelButton  = nil;
@@ -135,9 +138,14 @@
         if ([user.id isEqualToString:token.FaceBookID]) {
 
             if (![token.XBoxID isEqualToString:@""]){
-                NSString *curName = [[NSString alloc] initWithFormat:@"%@, %@, %@", user.last_name, user.name, user.id];
+                
+
+                NSString *curName = [[NSString alloc] initWithFormat:@"%@, %@, %@, %@", user.last_name, user.name, user.id, token.XBoxID];
             
                 [_sortedFriendInfo addObject:curName];
+                
+
+                 
             
                 return YES;
             }
@@ -175,12 +183,13 @@
         
     NSString *selectedName = [[NSString alloc] initWithString:_sortedArray[indexPath.row+rowTotal ]];
     [xbr setMyName:[self nameSwap:selectedName]];
-    [xbr setMyID:@"placeholder text"];
+    
     NSArray *splitName = [selectedName componentsSeparatedByString:@","];
 
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=100&height=100", [splitName[2] stringByReplacingOccurrencesOfString:@" " withString:@""]]];
     NSLog(@"%@", splitName[2]);
     [xbr setMyProfileImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
+    [xbr setMyID:splitName[3]];
 }
 
 /*

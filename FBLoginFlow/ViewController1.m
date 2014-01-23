@@ -83,7 +83,9 @@ int currentSeq = 0;
             [self fetchGamerTokens];
         }
         
-    }];
+    }
+     
+     ];
 
     
     
@@ -165,6 +167,8 @@ int currentSeq = 0;
     //NSString *greetingText = @"Greetings";
     //self.uiLabel.text = [NSString stringWithFormat:@"Hi, %@ %@ ", greetingText, [user first_name]];
    
+    self.myFBID = [NSString stringWithFormat:@"%@", [user id]];
+    
     
     
     self.networkPicker.hidden = 0;
@@ -330,6 +334,17 @@ int currentSeq = 0;
     //////////////////////////////////////////////////////
     
     
+    //construct a URL
+    NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/submitUserDetails.php"];
+    
+    //Put the URL into an USURLRequest
+    NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
+    
+    [req2 setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    [req2 setHTTPMethod:@"POST"];
+
+    
     
     [[NSUserDefaults standardUserDefaults] synchronize];
 
@@ -341,6 +356,9 @@ int currentSeq = 0;
     UITabBarController *tbc = [[UITabBarController alloc] init];
     
     if (currentSeq == 3) {
+        
+        //TODO: set user defaults and send usernames to database
+        
         NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, pvc, svc, nil];
         [tbc setViewControllers:viewControllers animated:NO];
         [self presentViewController:tbc animated:YES completion:NULL];
@@ -361,6 +379,13 @@ int currentSeq = 0;
     {
         NSUserDefaults *setting = [[NSUserDefaults alloc] init];
         [setting setInteger:0 forKey:@"networks"];
+        
+        
+        [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"xbid=%@&psid=%@&fbid=%@", _xbEntry.text,_psEntry.text, _myFBID] UTF8String] length:strlen([[NSString stringWithFormat:@"xbid=%@&psid=%@&fbid=%@", _xbEntry.text,_psEntry.text, _myFBID] UTF8String])]];
+        
+        
+        //Create a connection
+        connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:NULL startImmediately:YES];
 
         
         NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, svc, nil];
@@ -371,9 +396,6 @@ int currentSeq = 0;
          [self presentViewController:nav animated:NO completion:NULL];
 
     }
-    
-
-    
     
 
     
@@ -512,6 +534,7 @@ int currentSeq = 0;
 
 -(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data
 {
+    
     [xmlData appendData:data];
     
 }
@@ -527,7 +550,7 @@ int currentSeq = 0;
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:xmlData];
     
     [parser setDelegate:self];
-    
+
     [parser parse];
     
     xmlData = nil;
@@ -538,14 +561,6 @@ int currentSeq = 0;
     // set token data on view controller
     // TO DO: Need to do similar work for playstation view controller
     [xvc setTokenData:tokenData];
-    
-    NSLog(@"Count: %d", tokenData.tokens.count);
-    for( int i=0; i<tokenData.tokens.count; i++)
-    {
-        GamerToken *tempToken = tokenData.tokens[i];
-        NSLog(@"%@", tempToken.XBoxID);
-    }
-
 
     [xvc loadData];
 }
@@ -579,5 +594,7 @@ int currentSeq = 0;
     }
 
 }
+
+
 
 @end

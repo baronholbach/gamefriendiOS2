@@ -44,6 +44,7 @@
 @property (strong, nonatomic) NSArray *networkOptions;
 @property (weak, nonatomic) IBOutlet UIButton *confirmButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
+@property NSString *myFBID;
 
 - (IBAction)clickBasicShare:(id)sender;
 - (IBAction)clickFriends:(id)sender;
