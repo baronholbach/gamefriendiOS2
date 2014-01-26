@@ -43,7 +43,19 @@ static NSUserDefaults *settings;
     loginView.center = CGPointMake(160,400);
     [self.view addSubview:loginView];
     
-
+    NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getURL.php"];
+    
+    
+    //Put the URL into an USURLRequest
+    NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
+    
+    [req2 setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    [req2 setHTTPMethod:@"GET"];
+    
+    [req2 setHTTPBody:[NSData dataWithBytes:@"" length:0]];
+    
+    connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
     
     if ([settings valueForKey:@"psEntry"]) {
         _psEntry.text =[settings stringForKey:@"psEntry"];
@@ -114,6 +126,10 @@ static NSUserDefaults *settings;
             else {
   
                 textField.text = [settings objectForKey:@"psEntry"];
+                
+                
+                
+                
             }
         
     }
@@ -144,22 +160,27 @@ static NSUserDefaults *settings;
         if (textField == _psEntry) {
             
             
-            if ([settings stringForKey:@"psEntry" ] != NULL) {
-                
-                if (![textField.text isEqualToString:[settings stringForKey:@"psEntry"]]) {
+        if ([textField.text isEqualToString:[settings stringForKey:@"psEntry"]]) {
                     _nextPSEntry = textField.text;
                 
-                _psAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Are you sure you want to update Online ID?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
-                [_psAlert show];
+
                     
                 }
+        else {
+            
+            _nextPSEntry = textField.text;
+            
+            _psAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Are you sure you want to update Online ID?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+            [_psAlert show];
+            
+        }
                 
-            }
+            
             
             
 
             
-        }
+}
         
         
         else if (textField == _xbEntry) {
@@ -215,9 +236,9 @@ static NSUserDefaults *settings;
             
             [req2 setHTTPMethod:@"POST"];
             
-            [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"xbid=%@&fbid=%@", [settings objectForKey:@"xbEntry"], fbid] UTF8String] length:strlen([[NSString stringWithFormat:@"xbid=%@&fbid=%@", [settings objectForKey:@"xbEntry"], fbid]UTF8String])]];
-            
+            [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"xbid=%@&fbid=%@", [settings objectForKey:@"xbEntry"], fbid] UTF8String] length:strlen([[NSString stringWithFormat:@"xbid=%@&fbid=%@", [settings objectForKey:@"xbEntry"], fbid] UTF8String])]];
             connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
+            _xbEntry.clearsOnBeginEditing = NO;
             }
         
         
@@ -226,13 +247,13 @@ static NSUserDefaults *settings;
             }
         }
         
-        else {
+        else {  // if you updated the PSN ID box
             
             if (buttonIndex == 1) {
             
             [settings setObject:_nextPSEntry forKey:@"psEntry"];
                 [settings synchronize];
-            
+
             NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/submitUserDetails.php"];
             
             
@@ -247,6 +268,7 @@ static NSUserDefaults *settings;
             [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"psid=%@&fbid=%@", [settings objectForKey:@"psEntry"], fbid] UTF8String] length:strlen([[NSString stringWithFormat:@"psid=%@&fbid=%@", [settings objectForKey:@"psEntry"], fbid]UTF8String])]];
             
             connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
+            _psEntry.clearsOnBeginEditing = NO;
             }
             
             else if (buttonIndex == 0) {
@@ -263,20 +285,6 @@ static NSUserDefaults *settings;
 {
     
     
-    NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getURL.php"];
-    
-    
-    //Put the URL into an USURLRequest
-    NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
-    
-    [req2 setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    
-    [req2 setHTTPMethod:@"GET"];
-    
-    [req2 setHTTPBody:[NSData dataWithBytes:@"" length:0]];
-    
-    connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
-    
     
     // Check if the Facebook app is installed and we can present the share dialog
     FBShareDialogParams *params = [[FBShareDialogParams alloc] init];
@@ -289,6 +297,10 @@ static NSUserDefaults *settings;
     
     // If the Facebook app is installed and we can present the share dialog
     if ([FBDialogs canPresentShareDialogWithParams:params]) {
+        
+        
+
+        
         
         // Present share dialog
         [FBDialogs presentShareDialogWithLink:params.link

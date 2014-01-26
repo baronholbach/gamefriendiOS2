@@ -169,7 +169,7 @@ int currentSeq = 0;
    
     self.myFBID = [NSString stringWithFormat:@"%@", [user id]];
     [svc setFbid:[user id]];
-    
+    NSLog(@"user info fetched!");
     
     
     self.networkPicker.hidden = 0;
@@ -350,7 +350,7 @@ int currentSeq = 0;
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     PSViewController *pvc = [[PSViewController alloc]  init];
-    settingsViewController *svc =[[settingsViewController alloc] init];
+    //settingsViewController *svc =[[settingsViewController alloc] init];
     
 
     
@@ -380,13 +380,13 @@ int currentSeq = 0;
     {
         NSUserDefaults *setting = [[NSUserDefaults alloc] init];
         [setting setInteger:0 forKey:@"networks"];
-        
+        _psEntry.text = @"";
         
         [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"xbid=%@&psid=%@&fbid=%@", _xbEntry.text,_psEntry.text, _myFBID] UTF8String] length:strlen([[NSString stringWithFormat:@"xbid=%@&psid=%@&fbid=%@", _xbEntry.text,_psEntry.text, _myFBID] UTF8String])]];
         
         
         //Create a connection
-        connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:NULL startImmediately:YES];
+        connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
 
         
         NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, svc, nil];
@@ -536,7 +536,8 @@ int currentSeq = 0;
 -(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data
 {
     
-    [xmlData appendData:data];
+        [xmlData appendData:data];
+        NSLog(@"XXX%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     
 }
 
