@@ -54,8 +54,8 @@
     
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         
-       /*
-        for(id<FBGraphUser> user in result[@"data"])
+       
+        /*for(id<FBGraphUser> user in result[@"data"])
         {
         if ([user.last_name characterAtIndex:0] >= (int)'M') {
         
@@ -75,7 +75,7 @@
            //NSLog(@"%@", _sortedArray);
        // _finalSortedFriendInfo = [self nameSwap:_sortedArray];
     
-        _sortedArray = [[NSArray alloc] initWithArray:[_sortedFriendInfo sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]];
+
 
         
     
@@ -96,9 +96,8 @@
 
     
     //self.fieldsForRequest = [NSSet setWithObjects:@"devices", nil];
-    [self setSortOrdering:FBFriendSortByLastName];
-
     [self loadData];
+    
 
     UIImageView *titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"XboxLIVE_RGBvectorKO_horizontal_2013.png"]];
     UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"xbox_bg.png"]];
@@ -172,6 +171,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    _sortedArray = [[NSArray alloc] initWithArray:[_sortedFriendInfo sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]];
     XBSelectedRow *xbr = [[XBSelectedRow alloc] init];
     [[self navigationController] pushViewController:xbr animated:YES];
     self.navigationController.navigationBar.hidden = 0;

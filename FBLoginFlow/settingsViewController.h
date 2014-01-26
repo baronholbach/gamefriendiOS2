@@ -10,7 +10,20 @@
 
 @interface settingsViewController : UIViewController  <UITextFieldDelegate>
 
+{
+    NSURLConnection *connection;
+}
+
 @property (weak, nonatomic) IBOutlet UITextField *xbEntry;
 @property (weak, nonatomic) IBOutlet UITextField *psEntry;
+
+@property (weak, nonatomic) IBOutlet UIButton *fbShare;
+@property NSString *nextXBEntry;
+@property NSString *nextPSEntry;
+@property NSString *fbid;
+@property UIAlertView *xbAlert;
+@property UIAlertView *psAlert;
+
+
 
 @end

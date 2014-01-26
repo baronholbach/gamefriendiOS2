@@ -168,6 +168,7 @@ int currentSeq = 0;
     //self.uiLabel.text = [NSString stringWithFormat:@"Hi, %@ %@ ", greetingText, [user first_name]];
    
     self.myFBID = [NSString stringWithFormat:@"%@", [user id]];
+    [svc setFbid:[user id]];
     
     
     
@@ -329,9 +330,9 @@ int currentSeq = 0;
 -(IBAction)confirmPressed:(id)sender  {  //Entered your game network username, intro sequence
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
     
-    //////COMMENTED OUT FOR DEV PURPOSES.  REMOVE COMMENT//////
-    //[setting setObject:@"1" forKey:@"intro"];
-    //////////////////////////////////////////////////////
+    //////COMMENTED OUT FOR DEV PURPOSES.
+    [setting setObject:@"1" forKey:@"intro"];
+
     
     
     //construct a URL
@@ -594,7 +595,6 @@ int currentSeq = 0;
     }
 
 }
-
 
 
 @end
