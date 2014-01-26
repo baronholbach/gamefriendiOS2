@@ -66,6 +66,11 @@ static NSUserDefaults *settings;
     else {
 
     }
+    
+    CALayer *btnLayer = [_fbShare layer];
+    [btnLayer setMasksToBounds:YES];
+    [btnLayer setCornerRadius:4.0f];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -257,13 +262,29 @@ static NSUserDefaults *settings;
 - (IBAction)shareLinkWithShareDialog:(id)sender
 {
     
+    
+    NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getURL.php"];
+    
+    
+    //Put the URL into an USURLRequest
+    NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
+    
+    [req2 setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    [req2 setHTTPMethod:@"GET"];
+    
+    [req2 setHTTPBody:[NSData dataWithBytes:@"" length:0]];
+    
+    connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
+    
+    
     // Check if the Facebook app is installed and we can present the share dialog
     FBShareDialogParams *params = [[FBShareDialogParams alloc] init];
-    params.link = [NSURL URLWithString:@"https://developers.facebook.com/docs/ios/share/"];
-    params.name = @"Sharing Tutorial";
-    params.caption = @"Build great social apps and get more installs.";
+    params.link = [NSURL URLWithString:_fbURL];
+    params.name = @"Game Friend Finder";
+    params.caption = @"For PSN and Xbox Live.";
     params.picture = [NSURL URLWithString:@"http://i.imgur.com/g3Qc1HN.png"];
-    params.description = @"Allow your users to share stories on Facebook from your app using the iOS SDK.";
+    params.description = @"Check out this app that lets you find all your friends on Xbox Live and PSN instantly!";
     
     
     // If the Facebook app is installed and we can present the share dialog
@@ -292,12 +313,17 @@ static NSUserDefaults *settings;
         // FALLBACK: publish just a link using the Feed dialog
         
         // Put together the dialog parameters
+        
+
+        
+        
+        
         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        @"Game Friend Finder", @"name",
                                        @"For PSN and Xbox Live", @"caption",
                                        @"Check out this app that lets you find all your friends on Xbox Live and PSN instantly!", @"description",
-                                       @"https://developers.facebook.com/docs/ios/share/", @"link",
-                                       [UIImage imageNamed:@"400_F_32161739_cLQcViNu7WgHC3yjBDP5sanGGBRRkmtC.jpg"], @"picture",
+                                       _fbURL, @"link",
+                                       @"http://i.imgur.com/g3Qc1HN.png", @"picture",
                                        nil];
         
         // Show the feed dialog
@@ -344,6 +370,12 @@ static NSUserDefaults *settings;
     return params;
 }
 
-
+-(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data
+{
+    
+    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    _fbURL = string;
+    
+}
 
 @end

@@ -23,7 +23,9 @@
 @property NSString *fbid;
 @property UIAlertView *xbAlert;
 @property UIAlertView *psAlert;
+@property NSString *fbURL;
 
-
+- (IBAction)shareLinkWithShareDialog:(id)sender;
+- (NSDictionary*)parseURLParams:(NSString *)query;
 
 @end

@@ -49,6 +49,7 @@
 		06D3EE231858142100435759 /* gff_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 06D3EE221858142100435759 /* gff_logo.png */; };
 		06E70FEC1867F19F00D58961 /* XBViewController1.m in Sources */ = {isa = PBXBuildFile; fileRef = 06E70FEB1867F19F00D58961 /* XBViewController1.m */; };
 		06E70FEF1867F22A00D58961 /* PSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06E70FEE1867F22A00D58961 /* PSViewController.m */; };
+		06EE7E271894BF6700FC3708 /* FB-f-Logo__white_100.png in Resources */ = {isa = PBXBuildFile; fileRef = 06EE7E261894BF6700FC3708 /* FB-f-Logo__white_100.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +110,7 @@
 		06E70FEB1867F19F00D58961 /* XBViewController1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBViewController1.m; sourceTree = "<group>"; };
 		06E70FED1867F22A00D58961 /* PSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSViewController.h; sourceTree = "<group>"; };
 		06E70FEE1867F22A00D58961 /* PSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSViewController.m; sourceTree = "<group>"; };
+		06EE7E261894BF6700FC3708 /* FB-f-Logo__white_100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "FB-f-Logo__white_100.png"; path = "../../../../../../FB-f-Logo__white_100.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 		0628FD9818554EA400D591A3 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				06EE7E261894BF6700FC3708 /* FB-f-Logo__white_100.png */,
 				066C9402187875D7005A365F /* blackFrame copy.png */,
 				063534821874EB3D007B7EF2 /* 400_F_32161739_cLQcViNu7WgHC3yjBDP5sanGGBRRkmtC.jpg */,
 				0635347A18748447007B7EF2 /* XboxLIVE_RGBvectorKO_horizontal_2013.png */,
@@ -305,6 +308,7 @@
 				05E2890A18144EB500C612DD /* MainStoryboard.storyboard in Resources */,
 				06B94388185E653C007B0D1E /* tab_psn.png in Resources */,
 				06B9437A185E5EDC007B0D1E /* tab_xbox.png in Resources */,
+				06EE7E271894BF6700FC3708 /* FB-f-Logo__white_100.png in Resources */,
 				05E2892018144F1500C612DD /* FBUserSettingsViewResources.bundle in Resources */,
 				06B9434F185D7AEA007B0D1E /* settingsViewController.xib in Resources */,
 			);
