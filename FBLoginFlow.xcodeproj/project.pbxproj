@@ -26,6 +26,7 @@
 		05E2891A18144EE900C612DD /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E2891918144EE900C612DD /* libsqlite3.dylib */; };
 		05E2891C18144EEF00C612DD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E2891B18144EEF00C612DD /* CoreLocation.framework */; };
 		05E2892018144F1500C612DD /* FBUserSettingsViewResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 05E2891F18144F1500C612DD /* FBUserSettingsViewResources.bundle */; };
+		0623BC09189D886D008B11D5 /* ShareURLReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 0623BC08189D886D008B11D5 /* ShareURLReceiver.m */; };
 		063534771874836E007B7EF2 /* xbox_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 063534761874836E007B7EF2 /* xbox_bg.png */; };
 		063534791874837C007B7EF2 /* psn_bg2.png in Resources */ = {isa = PBXBuildFile; fileRef = 063534781874837C007B7EF2 /* psn_bg2.png */; };
 		0635347B18748447007B7EF2 /* XboxLIVE_RGBvectorKO_horizontal_2013.png in Resources */ = {isa = PBXBuildFile; fileRef = 0635347A18748447007B7EF2 /* XboxLIVE_RGBvectorKO_horizontal_2013.png */; };
@@ -36,6 +37,8 @@
 		066C9403187875D7005A365F /* blackFrame copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 066C9402187875D7005A365F /* blackFrame copy.png */; };
 		06724E51185EA01C003A3CA0 /* xboxTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06724E50185EA01C003A3CA0 /* xboxTestViewController.m */; };
 		0694FE58188C7CC900E9B813 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0694FE57188C7CC900E9B813 /* FacebookSDK.framework */; };
+		06B09E261899FCD400BFA044 /* PSSelectedRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B09E251899FCD400BFA044 /* PSSelectedRow.m */; };
+		06B09E281899FD0400BFA044 /* PSSelectedRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06B09E271899FD0400BFA044 /* PSSelectedRow.xib */; };
 		06B9434E185D7AEA007B0D1E /* settingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B9434C185D7AEA007B0D1E /* settingsViewController.m */; };
 		06B9434F185D7AEA007B0D1E /* settingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06B9434D185D7AEA007B0D1E /* settingsViewController.xib */; };
 		06B9437A185E5EDC007B0D1E /* tab_xbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 06B94379185E5EDC007B0D1E /* tab_xbox.png */; };
@@ -80,6 +83,8 @@
 		05E2891B18144EEF00C612DD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		05E2891F18144F1500C612DD /* FBUserSettingsViewResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FBUserSettingsViewResources.bundle; path = ../gameff.png/FacebookSDK.framework/Versions/A/Resources/FBUserSettingsViewResources.bundle; sourceTree = "<group>"; };
 		05E28922181497FD00C612DD /* FriendProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FriendProtocols.h; sourceTree = "<group>"; };
+		0623BC07189D886D008B11D5 /* ShareURLReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareURLReceiver.h; sourceTree = "<group>"; };
+		0623BC08189D886D008B11D5 /* ShareURLReceiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareURLReceiver.m; sourceTree = "<group>"; };
 		063534761874836E007B7EF2 /* xbox_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xbox_bg.png; sourceTree = "<group>"; };
 		063534781874837C007B7EF2 /* psn_bg2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = psn_bg2.png; sourceTree = "<group>"; };
 		0635347A18748447007B7EF2 /* XboxLIVE_RGBvectorKO_horizontal_2013.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = XboxLIVE_RGBvectorKO_horizontal_2013.png; sourceTree = "<group>"; };
@@ -94,6 +99,9 @@
 		06724E4F185EA01C003A3CA0 /* xboxTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xboxTestViewController.h; sourceTree = "<group>"; };
 		06724E50185EA01C003A3CA0 /* xboxTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = xboxTestViewController.m; sourceTree = "<group>"; };
 		0694FE57188C7CC900E9B813 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK.framework; sourceTree = "<group>"; };
+		06B09E241899FCD400BFA044 /* PSSelectedRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSSelectedRow.h; sourceTree = "<group>"; };
+		06B09E251899FCD400BFA044 /* PSSelectedRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSSelectedRow.m; sourceTree = "<group>"; };
+		06B09E271899FD0400BFA044 /* PSSelectedRow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSSelectedRow.xib; sourceTree = "<group>"; };
 		06B9434B185D7AEA007B0D1E /* settingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = settingsViewController.h; sourceTree = "<group>"; };
 		06B9434C185D7AEA007B0D1E /* settingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = settingsViewController.m; sourceTree = "<group>"; };
 		06B9434D185D7AEA007B0D1E /* settingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = settingsViewController.xib; sourceTree = "<group>"; };
@@ -110,7 +118,7 @@
 		06E70FEB1867F19F00D58961 /* XBViewController1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XBViewController1.m; sourceTree = "<group>"; };
 		06E70FED1867F22A00D58961 /* PSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSViewController.h; sourceTree = "<group>"; };
 		06E70FEE1867F22A00D58961 /* PSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSViewController.m; sourceTree = "<group>"; };
-		06EE7E261894BF6700FC3708 /* FB-f-Logo__white_100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "FB-f-Logo__white_100.png"; path = "../../../../../../FB-f-Logo__white_100.png"; sourceTree = "<group>"; };
+		06EE7E261894BF6700FC3708 /* FB-f-Logo__white_100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "FB-f-Logo__white_100.png"; path = "/Users/tompkins/Desktop/mlb resources/personal/untitled folder/github/logos-and-badges_f-logo_online/png/FB-f-Logo__white_100.png"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,12 +194,17 @@
 				066C93F818765C97005A365F /* XBSelectedRow.h */,
 				066C93F918765C97005A365F /* XBSelectedRow.m */,
 				066C93FA18765C97005A365F /* XBSelectedRow.xib */,
+				06B09E241899FCD400BFA044 /* PSSelectedRow.h */,
+				06B09E251899FCD400BFA044 /* PSSelectedRow.m */,
+				06B09E271899FD0400BFA044 /* PSSelectedRow.xib */,
 				066C93FD1878630F005A365F /* DBConnectionManager.h */,
 				066C93FE1878630F005A365F /* DBConnectionManager.m */,
 				05A458E2187A4FD8007F0DD2 /* GamerTokens.h */,
 				05A458E3187A4FD8007F0DD2 /* GamerTokens.m */,
 				05A458E5187A55AA007F0DD2 /* GamerToken.h */,
 				05A458E6187A55AA007F0DD2 /* GamerToken.m */,
+				0623BC07189D886D008B11D5 /* ShareURLReceiver.h */,
+				0623BC08189D886D008B11D5 /* ShareURLReceiver.m */,
 				05E288F718144EB500C612DD /* Supporting Files */,
 				06724E4F185EA01C003A3CA0 /* xboxTestViewController.h */,
 				06724E50185EA01C003A3CA0 /* xboxTestViewController.m */,
@@ -294,6 +307,7 @@
 				05E2890318144EB500C612DD /* Default.png in Resources */,
 				063534831874EB3D007B7EF2 /* 400_F_32161739_cLQcViNu7WgHC3yjBDP5sanGGBRRkmtC.jpg in Resources */,
 				06B9437E185E6229007B0D1E /* PlayStation_Network_2013.png in Resources */,
+				06B09E281899FD0400BFA044 /* PSSelectedRow.xib in Resources */,
 				05E2890518144EB500C612DD /* Default@2x.png in Resources */,
 				06B9437C185E5FB6007B0D1E /* tab_xbox@2x.png in Resources */,
 				0635347B18748447007B7EF2 /* XboxLIVE_RGBvectorKO_horizontal_2013.png in Resources */,
@@ -331,6 +345,8 @@
 				066C93FB18765C97005A365F /* XBSelectedRow.m in Sources */,
 				06E70FEC1867F19F00D58961 /* XBViewController1.m in Sources */,
 				05A458E7187A55AA007F0DD2 /* GamerToken.m in Sources */,
+				0623BC09189D886D008B11D5 /* ShareURLReceiver.m in Sources */,
+				06B09E261899FCD400BFA044 /* PSSelectedRow.m in Sources */,
 				06E70FEF1867F22A00D58961 /* PSViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

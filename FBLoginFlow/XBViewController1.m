@@ -141,7 +141,10 @@
 
                 NSString *curName = [[NSString alloc] initWithFormat:@"%@, %@, %@, %@", user.last_name, user.name, user.id, token.XBoxID];
             
-                [_sortedFriendInfo addObject:curName];
+                if(![_sortedFriendInfo containsObject:curName]) {
+                    [_sortedFriendInfo addObject:curName];
+                }
+                
                 
 
                  
@@ -176,7 +179,7 @@
     [[self navigationController] pushViewController:xbr animated:YES];
     self.navigationController.navigationBar.hidden = 0;
     int rowTotal = 0;
-    for (int i=0; i <= indexPath.section; i++) {
+    for (int i=0; i < indexPath.section; i++) {
         rowTotal += [tableView numberOfRowsInSection:i];
     }
 

@@ -6,14 +6,17 @@
 //  Copyright (c) 2013 Tracy Liu. All rights reserved.
 //
 
+
+#import "FriendProtocols.h"
 #import <UIKit/UIKit.h>
+#import <FacebookSDK/FacebookSDK.h>
 @class GamerTokens;
 @class XBViewController1;
 @class PSViewController;
 @class settingsViewController;
 
 
-@interface ViewController1 : UIViewController <UIPickerViewDataSource,UIPickerViewDelegate, NSXMLParserDelegate>
+@interface ViewController1 : UIViewController <UIPickerViewDataSource,UIPickerViewDelegate, NSXMLParserDelegate,FBLoginViewDelegate, UITextFieldDelegate>
 {
     // web service related objects
     NSURLConnection *connection;
@@ -25,6 +28,7 @@
     PSViewController *pvc;
     settingsViewController *svc;
     NSMutableArray *searchArray;
+    int cachedUser;
     
     NSMutableString *searchIDs;
 }
@@ -39,6 +43,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *psLabel;
 @property UINavigationBar *navBar;
 @property UINavigationItem *navItem;
+@property XBViewController1 *xvc;
 
 
 @property (strong, nonatomic) NSArray *networkOptions;

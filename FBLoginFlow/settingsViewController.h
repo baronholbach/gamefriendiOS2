@@ -7,11 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ViewController1.h"
+#import "ShareURLReceiver.h"
 
 @interface settingsViewController : UIViewController  <UITextFieldDelegate>
 
 {
     NSURLConnection *connection;
+    NSUserDefaults *settings;
+    
+    
+    NSMutableData *xmlData;
+    GamerTokens *tokenData;
+    NSMutableString *searchIDs;
+    NSMutableArray *searchArray;
+    ShareURLReceiver *urlRec;
+    int platformUpdate;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *xbEntry;
@@ -27,5 +38,7 @@
 
 - (IBAction)shareLinkWithShareDialog:(id)sender;
 - (NSDictionary*)parseURLParams:(NSString *)query;
+- (void)setUpSearchIDs;
+- (void)fetchGamerTokens;
 
 @end

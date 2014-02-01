@@ -7,8 +7,14 @@
 //
 
 #import "settingsViewController.h"
-#import "ViewController1.h"
+
 #import <FacebookSDK/FacebookSDK.h>
+#import "PSViewController.h"
+#import "XBViewController1.h"
+#import "ViewController1.h"
+#import "GamerToken.h"
+#import "GamerTokens.h"
+
 
 @interface settingsViewController () <FBLoginViewDelegate, UIAlertViewDelegate>
 @end
@@ -27,7 +33,6 @@ static NSUserDefaults *settings;
         // Custom initialization
         [self.tabBarItem initWithTitle:@"Settings" image:[UIImage imageNamed:@"tab_settings.png"] tag:2];
         settings = [[NSUserDefaults alloc] init];
-        
     }
     return self;
 }
@@ -44,7 +49,7 @@ static NSUserDefaults *settings;
     [self.view addSubview:loginView];
     
     NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getURL.php"];
-    
+    ShareURLReceiver *urlRec = [[ShareURLReceiver alloc] init];
     
     //Put the URL into an USURLRequest
     NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
@@ -55,7 +60,7 @@ static NSUserDefaults *settings;
     
     [req2 setHTTPBody:[NSData dataWithBytes:@"" length:0]];
     
-    connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
+    connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:urlRec startImmediately:YES];
     
     if ([settings valueForKey:@"psEntry"]) {
         _psEntry.text =[settings stringForKey:@"psEntry"];
@@ -98,7 +103,6 @@ static NSUserDefaults *settings;
     [FBSettings setLoggingBehavior:set];
 
     
-    
 }
 
 -(void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView {
@@ -126,8 +130,7 @@ static NSUserDefaults *settings;
             else {
   
                 textField.text = [settings objectForKey:@"psEntry"];
-                
-                
+   
                 
                 
             }
@@ -173,6 +176,7 @@ static NSUserDefaults *settings;
             _psAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Are you sure you want to update Online ID?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
             [_psAlert show];
             
+            
         }
                 
             
@@ -186,9 +190,12 @@ static NSUserDefaults *settings;
         else if (textField == _xbEntry) {
             
             
-          if (![textField.text isEqualToString:[settings stringForKey:@"xbEntry"]]) {
+            if ([textField.text isEqualToString:[settings stringForKey:@"xbEntry"]]) {
+                _nextXBEntry = textField.text;
+                
+            }
+          else {
 
-           if ([settings stringForKey:@"xbEntry" ] != NULL) {
                _nextXBEntry = textField.text;
                
                
@@ -196,7 +203,7 @@ static NSUserDefaults *settings;
                [_xbAlert show];
             
            }
-          }
+          
             
             
 
@@ -241,11 +248,25 @@ static NSUserDefaults *settings;
             _xbEntry.clearsOnBeginEditing = NO;
             }
         
-        
+        if ([settings integerForKey:@"networks"] == 1)
+        {
+            [settings setInteger:3 forKey:@"networks"];
+            
+            XBViewController1 *xvc = [[XBViewController1 alloc] init];
+            NSArray *xbtabArray = [[self tabBarController] viewControllers];
+            NSArray *xbaddView = [NSArray arrayWithObjects:xvc, xbtabArray[0], xbtabArray[1], nil];
+            [[self tabBarController] setViewControllers:xbaddView animated:NO];
+            [self setUpSearchIDs];
+             platformUpdate = 1;
+        }
+    
+    }
+    
+    
             else if (buttonIndex == 0) {
                 _xbEntry.text = [settings objectForKey:@"xbEntry"];
             }
-        }
+    
         
         else {  // if you updated the PSN ID box
             
@@ -269,6 +290,18 @@ static NSUserDefaults *settings;
             
             connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
             _psEntry.clearsOnBeginEditing = NO;
+                NSLog(@"%d", [settings integerForKey:@"networks"]);
+                
+            if ([settings integerForKey:@"networks"] == 0)
+            {
+                [settings setInteger:3 forKey:@"networks"];
+                PSViewController *pvc = [[PSViewController alloc] init];
+                NSArray *tabArray = [[self tabBarController] viewControllers];
+                NSArray *addView = [NSArray arrayWithObjects:tabArray[0], pvc, tabArray[1], nil];
+                [[self tabBarController] setViewControllers:addView animated:NO];
+                [self setUpSearchIDs];
+                platformUpdate = 0;
+            }
             }
             
             else if (buttonIndex == 0) {
@@ -288,7 +321,7 @@ static NSUserDefaults *settings;
     
     // Check if the Facebook app is installed and we can present the share dialog
     FBShareDialogParams *params = [[FBShareDialogParams alloc] init];
-    params.link = [NSURL URLWithString:_fbURL];
+    params.link = [NSURL URLWithString:urlRec.myURL];
     params.name = @"Game Friend Finder";
     params.caption = @"For PSN and Xbox Live.";
     params.picture = [NSURL URLWithString:@"http://i.imgur.com/g3Qc1HN.png"];
@@ -382,12 +415,143 @@ static NSUserDefaults *settings;
     return params;
 }
 
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return (newLength > 16) ? NO : YES;
+}
+
+/////////////////////////////////////
+// Web service methods
+////////////////////////////////////
+
+// function to get gamer tokens from web service
+- (void)fetchGamerTokens
+{
+    
+    // initialize holder for data coming back from server
+    xmlData = [[NSMutableData alloc] init];
+    
+    
+    //construct an URL
+    NSURL *url = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getUserList.php"];
+    
+    //Put the URL into an USURLRequest
+    NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
+    
+    [req setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    [req setHTTPMethod:@"POST"];
+    [req setHTTPBody:[NSData dataWithBytes:[searchIDs UTF8String] length:strlen([searchIDs UTF8String])]];
+    
+    //Create a connection
+    
+    connection = [[NSURLConnection alloc] initWithRequest:req delegate:self startImmediately:YES];
+}
+
+
 -(void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data
 {
     
-    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    _fbURL = string;
+    [xmlData appendData:data];
+    //NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     
 }
+
+// function called when finishing receiving data from web service
+-(void)connectionDidFinishLoading:(NSURLConnection *)conn
+{
+    // For testing only: log xml data received from web service
+    // NSString *xmlCheck = [[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding];
+    // NSLog(@"xmlCheck = %@", xmlCheck);
+    
+    // Create the parser object with the data received from the web service
+    NSXMLParser *parser = [[NSXMLParser alloc] initWithData:xmlData];
+    
+    [parser setDelegate:self];
+    
+    [parser parse];
+    
+    xmlData = nil;
+    
+    connection = nil;
+    
+    
+    // set token data on view controller
+    // TO DO: Need to do similar work for playstation view controller
+    
+    if (platformUpdate == 1) {
+    [[[self tabBarController] viewControllers][0] setTokenData:tokenData];
+        [[[self tabBarController] viewControllers][0] loadData];}
+    
+    
+    else if (platformUpdate == 0) {
+    [[[self tabBarController] viewControllers][1] setTokenData:tokenData];
+        [[[self tabBarController] viewControllers][1] loadData]; }
+}
+
+// function called when fail to web service
+-(void)connection:(NSURLConnection *)conn didFailWithError:(NSError *)error
+{
+    connection = nil;
+    xmlData = nil;
+    
+    // show alert view
+    NSString *errorString = [NSString stringWithFormat:@"Fetch failed: %@", [error localizedDescription]];
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [av show];
+}
+
+/////////////////////////////////////////////////
+// NSXMLParserDelegate method overrides
+/////////////////////////////////////////////////
+-(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
+{
+    NSLog(@"%@ found a %@ element", self, elementName);
+    
+    if ([elementName isEqual:@"gamertokens"])
+    {
+        tokenData = [[GamerTokens alloc] init];
+        
+        [tokenData setParentParserDelegate:self];  // Give channel object a pointer back to ListViewController(self) for later
+        
+        [parser setDelegate:tokenData];
+    }
+    
+    
+}
+
+
+
+-(void)setUpSearchIDs {
+    
+FBRequest* request = [FBRequest requestForMyFriends];
+searchIDs =  [[NSMutableString alloc] init];
+[searchIDs appendString:@"name="];
+searchArray = [[NSMutableArray alloc] init];
+[request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+    for(id<FBGraphUser> user in result[@"data"])
+    {
+        
+        [searchArray addObject:user.id];
+        [searchIDs appendFormat:@"\"%@\"", user.id];
+        [searchIDs appendString:@","];
+        
+    }
+    
+    if ([searchIDs length] > 0) {
+        
+        [searchIDs deleteCharactersInRange:NSMakeRange([searchIDs length] - 1, 1)];
+    }
+    
+    // Send request to database
+    
+    if (self) {
+        [self fetchGamerTokens];
+    }
+
+}];
+}
+
 
 @end

@@ -7,15 +7,15 @@
 //
 
 #import "ViewController1.h"
-#import "FriendProtocols.h"
-#import <FacebookSDK/FacebookSDK.h>
+
+
 #import "XBViewController1.h"
 #import "PSViewController.h"
 #import "settingsViewController.h"
 #import "GamerTokens.h"
 #import "GamerToken.h"
 
-@interface ViewController1 () <FBLoginViewDelegate, UITextFieldDelegate>
+@interface ViewController1 () 
 @end
 
 @implementation ViewController1
@@ -29,7 +29,7 @@ int currentSeq = 0;
 {
     [super viewDidLoad];
     
-    
+    cachedUser = FALSE;
     _navBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
             [self.view addSubview:_navBar];
     _navBar.hidden = 1;
@@ -57,103 +57,8 @@ int currentSeq = 0;
 
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView {
     
-    
-    FBRequest* request = [FBRequest requestForMyFriends];
-    searchIDs =  [[NSMutableString alloc] init];
-    
-    [searchIDs appendString:@"name="];
-    searchArray = [[NSMutableArray alloc] init];
-    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        for(id<FBGraphUser> user in result[@"data"])
-        {
-
-            [searchArray addObject:user.id];
-            [searchIDs appendFormat:@"\"%@\"", user.id];
-            [searchIDs appendString:@","];
-        
-        }
-        
-        if ([searchIDs length] > 0) {
- 
-            [searchIDs deleteCharactersInRange:NSMakeRange([searchIDs length] - 1, 1)];
-        }
-
-
-        if (self) {
-            [self fetchGamerTokens];
-        }
-        
     }
-     
-     ];
 
-    
-    
-    //fetch gamer tokens from web service
-
-    
-    
-    NSUserDefaults *setting = [[NSUserDefaults alloc] init];
-    
-    
-    if (![setting objectForKey:@"intro"]) {   //Before you have gone through intro
-    loginView.hidden = 1;
-    _uiLabel.hidden = 0;
-    }
-    
-    else {
-        
-        
-        NSUserDefaults *setting = [[NSUserDefaults alloc] init];
-        int network = [setting integerForKey:@"networks"];
-
-        NSLog(@"%d", network);
-        
-        
-        
-        
-        UITabBarController *tbc = [[UITabBarController alloc] init];
-        
-        
-        switch (network) {
-            
-        case 0:  //Xbox ONLY
-            {
-                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
-                nav.navigationBar.hidden = YES;
-                NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, svc, nil];
-                [tbc setViewControllers:viewControllers animated:NO];
-                [self presentViewController:nav animated:NO completion:NULL];
-      
-            }
-        break;
-            
-            case 1:  //PS ONLY
-            {
-                NSArray *viewControllers = [[NSArray alloc] initWithObjects:pvc, svc, nil];
-                [tbc setViewControllers:viewControllers animated:NO];
-                [self presentViewController:tbc animated:NO completion:NULL];
-
-
-            }
-            break;
-                
-            case 3:  //BOTH Networks
-            {
-                NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, pvc, svc, nil];
-                [tbc setViewControllers:viewControllers animated:NO];
-                [self presentViewController:tbc animated:NO completion:NULL];
-
-                break;
-            }
-            
-            
-        }
-                 
-        
-        
-    }
-}
 
 -(void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView {
     [self.view addSubview:loginView];
@@ -161,13 +66,9 @@ int currentSeq = 0;
 
 -(void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
 {
-    
-   // self.uiLabel.text = [NSString stringWithFormat:@"Hi, %@", [user first_name]];
-    
-    //NSString *greetingText = @"Greetings";
-    //self.uiLabel.text = [NSString stringWithFormat:@"Hi, %@ %@ ", greetingText, [user first_name]];
-   
-    self.myFBID = [NSString stringWithFormat:@"%@", [user id]];
+    if (cachedUser == FALSE) {
+        cachedUser = TRUE;
+       self.myFBID = [NSString stringWithFormat:@"%@", [user id]];
     [svc setFbid:[user id]];
     NSLog(@"user info fetched!");
     
@@ -175,6 +76,160 @@ int currentSeq = 0;
     self.networkPicker.hidden = 0;
     
     loginView.center = CGPointMake(150,450);
+    
+    FBRequest* request = [FBRequest requestForMyFriends];
+    searchIDs =  [[NSMutableString alloc] init];
+    NSUserDefaults *setting = [[NSUserDefaults alloc] init];
+    
+    // Set up string of friends to send to search against database
+    
+    [searchIDs appendString:@"name="];
+    searchArray = [[NSMutableArray alloc] init];
+    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        for(id<FBGraphUser> user in result[@"data"])
+        {
+            
+            [searchArray addObject:user.id];
+            [searchIDs appendFormat:@"\"%@\"", user.id];
+            [searchIDs appendString:@","];
+            
+        }
+        
+        if ([searchIDs length] > 0) {
+            
+            [searchIDs deleteCharactersInRange:NSMakeRange([searchIDs length] - 1, 1)];
+        }
+        
+        // Send request to database
+        
+        if (self) {
+            [self fetchGamerTokens];
+        }
+        
+    }
+     
+     ];
+    
+    // Only check database for my current info if I am on a fresh install.  Otherwise this info is stored in NSUser defaults
+    
+   if ( ![setting objectForKey:@"intro"]) {
+        
+        NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getUserDetails.php"];
+        
+        NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
+        NSURLResponse *response = nil;
+        NSError *error = nil;
+        [req2 setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        
+        [req2 setHTTPMethod:@"POST"];
+        
+        [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"name=%@", _myFBID] UTF8String] length:strlen([[NSString stringWithFormat:@"name=%@", _myFBID] UTF8String])]];
+        
+        NSData *responseData = [NSURLConnection sendSynchronousRequest:req2 returningResponse:&response error:&error];
+        NSString *curString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        
+        
+        if ( [curString length] > 2 ) {
+            
+            //construct a URL
+            
+            NSArray *curArray = [curString componentsSeparatedByString:@","];
+            
+            NSString *curPSID = [curArray[1] substringFromIndex:16];
+            NSString *curXBID =  [curArray[0] substringFromIndex:16];
+            
+            
+            [setting setObject:@"1" forKey:@"intro"];
+            [setting synchronize];
+            
+            
+            if (![curXBID isEqualToString:@""]) {
+                [setting setObject:curXBID forKey:@"xbEntry"];
+                if (![curPSID isEqualToString:@""]) {
+                    [setting setObject:curPSID forKey:@"psEntry"];
+                    [setting setInteger:3 forKey:@"networks"];
+                    
+                }
+                
+                else {
+                    [setting setInteger:0 forKey:@"networks"];
+                    
+                }
+            }
+            
+            else {
+                [setting setObject:curPSID forKey:@"psEntry"];
+                [setting setInteger:1 forKey:@"networks"];
+                
+                
+            }
+            
+            
+        }
+        
+   
+        
+        
+}
+        
+        if (! [setting objectForKey:@"intro"]) {   //Before you have gone through intro, show intro flow, starting with friend picker
+            loginView.hidden = 1;
+            _uiLabel.hidden = 0;
+        }
+        
+        
+        // Use the setting for "networks" to determine which views to load in the tab bar controller.
+        
+        else {
+            
+            NSLog(@"%d", [setting integerForKey:@"networks"]);
+            
+            UITabBarController *tbc = [[UITabBarController alloc] init];
+            
+            
+            switch ([setting integerForKey:@"networks"]) {
+                    
+                case 0:  //Xbox ONLY
+                {
+                    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
+                    nav.navigationBar.hidden = YES;
+                    NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, svc, nil];
+                    [tbc setViewControllers:viewControllers animated:NO];
+                    [self presentViewController:nav animated:NO completion:NULL];
+                    
+                }
+                    break;
+                    
+                case 1:  //PS ONLY
+                {
+                    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
+                    nav.navigationBar.hidden = YES;
+                    NSArray *viewControllers = [[NSArray alloc] initWithObjects:pvc, svc, nil];
+                    [tbc setViewControllers:viewControllers animated:NO];
+                    [self presentViewController:nav animated:NO completion:NULL];
+                    
+                    
+                }
+                    break;
+                    
+                case 3:  //BOTH Networks
+                {
+                    
+                    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
+                    nav.navigationBar.hidden = YES;
+                    NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, pvc, svc, nil];
+                    [tbc setViewControllers:viewControllers animated:NO];
+                    [self presentViewController:nav animated:NO completion:NULL];
+                    
+                    break;
+                }
+            }
+        }
+
+   
+   }
+    
+    
     
 }
 
@@ -349,9 +404,13 @@ int currentSeq = 0;
     
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    PSViewController *pvc = [[PSViewController alloc]  init];
     //settingsViewController *svc =[[settingsViewController alloc] init];
     
+    [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"xbid=%@&psid=%@&fbid=%@", [setting objectForKey:@"xbEntry"],[setting objectForKey:@"psEntry"], _myFBID] UTF8String] length:strlen([[NSString stringWithFormat:@"xbid=%@&psid=%@&fbid=%@", [setting objectForKey:@"xbEntry"], [setting objectForKey:@"psEntry"], _myFBID] UTF8String])]];
+    
+    
+    //Create a connection
+    connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
 
     
     UITabBarController *tbc = [[UITabBarController alloc] init];
@@ -360,34 +419,40 @@ int currentSeq = 0;
         
         //TODO: set user defaults and send usernames to database
         
-        NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, pvc, svc, nil];
-        [tbc setViewControllers:viewControllers animated:NO];
-        [self presentViewController:tbc animated:YES completion:NULL];
         NSUserDefaults *setting = [[NSUserDefaults alloc] init];
         [setting setInteger:3 forKey:@"networks"];
+        
+        NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, pvc, svc, nil];
+        [tbc setViewControllers:viewControllers animated:NO];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
+        nav.navigationBar.hidden = YES;
+        [self presentViewController:nav animated:YES completion:NULL];
+       
     }
     
     else if (currentSeq == 1)
     {
-        NSArray *viewControllers = [[NSArray alloc] initWithObjects:pvc, svc, nil];
-        [tbc setViewControllers:viewControllers animated:NO];
-        [self presentViewController:tbc animated:YES completion:NULL];
+        
         NSUserDefaults *setting = [[NSUserDefaults alloc] init];
         [setting setInteger:1 forKey:@"networks"];
+        _xbEntry.text = @"";
+        
+        NSArray *viewControllers = [[NSArray alloc] initWithObjects:pvc, svc, nil];
+        [tbc setViewControllers:viewControllers animated:NO];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
+        nav.navigationBar.hidden = YES;
+        [self presentViewController:nav animated:YES completion:NULL];
+
+        
+        
     }
     
-    else if (currentSeq == 0)
+    else    //Xbox only
     {
         NSUserDefaults *setting = [[NSUserDefaults alloc] init];
         [setting setInteger:0 forKey:@"networks"];
         _psEntry.text = @"";
         
-        [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"xbid=%@&psid=%@&fbid=%@", _xbEntry.text,_psEntry.text, _myFBID] UTF8String] length:strlen([[NSString stringWithFormat:@"xbid=%@&psid=%@&fbid=%@", _xbEntry.text,_psEntry.text, _myFBID] UTF8String])]];
-        
-        
-        //Create a connection
-        connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
-
         
         NSArray *viewControllers = [[NSArray alloc] initWithObjects:xvc, svc, nil];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbc];
@@ -396,6 +461,7 @@ int currentSeq = 0;
         
          [self presentViewController:nav animated:NO completion:NULL];
 
+    
     }
     
 
@@ -537,7 +603,7 @@ int currentSeq = 0;
 {
     
         [xmlData appendData:data];
-        NSLog(@"XXX%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     
 }
 
@@ -563,8 +629,10 @@ int currentSeq = 0;
     // set token data on view controller
     // TO DO: Need to do similar work for playstation view controller
     [xvc setTokenData:tokenData];
+    [pvc setTokenData:tokenData];
 
     [xvc loadData];
+    [pvc loadData];
 }
 
 // function called when fail to web service
@@ -595,7 +663,12 @@ int currentSeq = 0;
         [parser setDelegate:tokenData];
     }
 
+
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return (newLength > 16) ? NO : YES;
+}
 
 @end
