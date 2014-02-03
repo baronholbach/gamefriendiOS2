@@ -33,6 +33,30 @@ static NSUserDefaults *settings;
         // Custom initialization
         [self.tabBarItem initWithTitle:@"Settings" image:[UIImage imageNamed:@"tab_settings.png"] tag:2];
         settings = [[NSUserDefaults alloc] init];
+    
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(getReadyToUpdate)
+                                                     name:UIApplicationWillResignActiveNotification object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(refresh)
+                                                     name:UIApplicationDidBecomeActiveNotification object:nil];
+
+        NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getURL.php"];
+        
+        //Put the URL into an USURLRequest
+        NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
+        
+        [req2 setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        
+        [req2 setHTTPMethod:@"GET"];
+        
+        [req2 setHTTPBody:[NSData dataWithBytes:@"" length:0]];
+        
+        _urlRec = [[ShareURLReceiver alloc] init];
+        connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:_urlRec startImmediately:YES];
+        
+        
     }
     return self;
 }
@@ -48,19 +72,8 @@ static NSUserDefaults *settings;
     loginView.center = CGPointMake(160,400);
     [self.view addSubview:loginView];
     
-    NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/getURL.php"];
-    ShareURLReceiver *urlRec = [[ShareURLReceiver alloc] init];
+
     
-    //Put the URL into an USURLRequest
-    NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
-    
-    [req2 setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    
-    [req2 setHTTPMethod:@"GET"];
-    
-    [req2 setHTTPBody:[NSData dataWithBytes:@"" length:0]];
-    
-    connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:urlRec startImmediately:YES];
     
     if ([settings valueForKey:@"psEntry"]) {
         _psEntry.text =[settings stringForKey:@"psEntry"];
@@ -288,7 +301,7 @@ static NSUserDefaults *settings;
             
             [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"psid=%@&fbid=%@", [settings objectForKey:@"psEntry"], fbid] UTF8String] length:strlen([[NSString stringWithFormat:@"psid=%@&fbid=%@", [settings objectForKey:@"psEntry"], fbid]UTF8String])]];
             
-            connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
+                connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
             _psEntry.clearsOnBeginEditing = NO;
                 NSLog(@"%d", [settings integerForKey:@"networks"]);
                 
@@ -321,7 +334,9 @@ static NSUserDefaults *settings;
     
     // Check if the Facebook app is installed and we can present the share dialog
     FBShareDialogParams *params = [[FBShareDialogParams alloc] init];
-    params.link = [NSURL URLWithString:urlRec.myURL];
+
+    NSString *myURL = [_urlRec returnURL];
+    params.link = [NSURL URLWithString:myURL];
     params.name = @"Game Friend Finder";
     params.caption = @"For PSN and Xbox Live.";
     params.picture = [NSURL URLWithString:@"http://i.imgur.com/g3Qc1HN.png"];
@@ -367,9 +382,10 @@ static NSUserDefaults *settings;
                                        @"Game Friend Finder", @"name",
                                        @"For PSN and Xbox Live", @"caption",
                                        @"Check out this app that lets you find all your friends on Xbox Live and PSN instantly!", @"description",
-                                       _fbURL, @"link",
+                                       [_urlRec returnURL], @"link",
                                        @"http://i.imgur.com/g3Qc1HN.png", @"picture",
                                        nil];
+
         
         // Show the feed dialog
         [FBWebDialogs presentFeedDialogModallyWithSession:nil
@@ -488,6 +504,247 @@ static NSUserDefaults *settings;
     else if (platformUpdate == 0) {
     [[[self tabBarController] viewControllers][1] setTokenData:tokenData];
         [[[self tabBarController] viewControllers][1] loadData]; }
+    
+    else if (platformUpdate == 2) {
+        [[[self tabBarController] viewControllers][0] setTokenData:tokenData];
+        [[[self tabBarController] viewControllers][0] loadData];
+        [[[self tabBarController] viewControllers][1] setTokenData:tokenData];
+        [[[self tabBarController] viewControllers][1] loadData];
+        
+
+        CGRect screen = [[UIScreen mainScreen] bounds];
+        
+        NSMutableArray *PSIDs = [[NSMutableArray alloc] init];
+        NSMutableArray *XBIDs = [[NSMutableArray alloc] init];
+        for (GamerToken *token in tokenData.tokens) {
+            
+            if (![token.PlayStationID isEqualToString:@""]) {
+                [PSIDs addObject:token.PlayStationID];
+            }
+            
+            if (![token.XBoxID isEqualToString:@""]) {
+                [XBIDs addObject:token.XBoxID];
+            }
+        }
+
+        
+        if ([settings integerForKey:@"networks"] == 0) {
+            XBViewController1 *xvc = [[self tabBarController] viewControllers][0];
+            
+            if ( [XBIDs count] == 0) {
+
+            [xvc.tableView removeFromSuperview];
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, screen.size.width, 100)];
+            label.text = @"None of your Facebook friends were found in Xbox Live database. Share on Facebook and invite them!";
+            label.textAlignment = NSTextAlignmentCenter;
+            label.font = [UIFont fontWithName:@"Futura" size:14];
+            label.lineBreakMode = NSLineBreakByWordWrapping;
+            label.numberOfLines = 0;
+            label.bounds = CGRectInset(label.frame, 15.0f, 0);
+            
+            UIButton *fbShare = [[UIButton alloc] initWithFrame:CGRectMake(screen.size.width/2-63, screen.size.height/2+10, 125, 83)];
+            
+            fbShare.backgroundColor = [UIColor colorWithRed:59.0/255 green:89.0/255 blue:152.0/255 alpha:1];
+            
+            [fbShare setTitle:@"Share on Facebook" forState:UIControlStateNormal];
+            fbShare.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+            fbShare.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            [fbShare setTitleEdgeInsets:UIEdgeInsetsMake(30, 0, 0, 35)];
+            fbShare.titleLabel.shadowOffset = CGSizeMake(2, 2);
+            fbShare.titleLabel.shadowColor = [UIColor darkGrayColor];
+            [fbShare setEnabled:YES];
+            [fbShare setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+            [fbShare setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+            [fbShare setAdjustsImageWhenDisabled:YES];
+            [fbShare setAdjustsImageWhenHighlighted:YES];
+            [fbShare addTarget:self action:@selector(shareLinkWithShareDialog:) forControlEvents:UIControlEventTouchUpInside];
+            UIImageView *fbIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"FB-f-Logo__white_100.png"]];
+            [fbIcon setFrame:CGRectMake(5, 5, 30, 30)];
+            
+            [fbShare addSubview:fbIcon];
+            
+            
+            CALayer *btnLayer = [fbShare layer];
+            [btnLayer setMasksToBounds:YES];
+            [btnLayer setCornerRadius:4.0f];
+            
+            [xvc.view addSubview:fbShare];
+            [xvc.view addSubview:label];
+            }
+            
+            else {
+                [xvc.view addSubview:xvc.tableView];
+                
+            }
+            
+        }
+        
+        else if ([settings integerForKey:@"networks"] == 1) {
+            PSViewController *pvc = [[self tabBarController] viewControllers][0];
+            
+            if ([PSIDs count] == 0) {
+                
+                [pvc.tableView removeFromSuperview];
+                
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, screen.size.width, 100)];
+                label.text = @"None of your Facebook friends were found in PSN database. Share on Facebook and invite them!";
+                label.textAlignment = NSTextAlignmentCenter;
+                label.font = [UIFont fontWithName:@"Futura" size:14];
+                label.lineBreakMode = NSLineBreakByWordWrapping;
+                label.numberOfLines = 0;
+                label.bounds = CGRectInset(label.frame, 15.0f, 0);
+                
+                UIButton *fbShare = [[UIButton alloc] initWithFrame:CGRectMake(screen.size.width/2-63, screen.size.height/2+10, 125, 83)];
+                
+                fbShare.backgroundColor = [UIColor colorWithRed:59.0/255 green:89.0/255 blue:152.0/255 alpha:1];
+                
+                [fbShare setTitle:@"Share on Facebook" forState:UIControlStateNormal];
+                fbShare.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+                fbShare.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+                [fbShare setTitleEdgeInsets:UIEdgeInsetsMake(30, 0, 0, 35)];
+                fbShare.titleLabel.shadowOffset = CGSizeMake(2, 2);
+                fbShare.titleLabel.shadowColor = [UIColor darkGrayColor];
+                [fbShare setEnabled:YES];
+                [fbShare setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+                [fbShare setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+                [fbShare setAdjustsImageWhenDisabled:YES];
+                [fbShare setAdjustsImageWhenHighlighted:YES];
+                [fbShare addTarget:self action:@selector(shareLinkWithShareDialog:) forControlEvents:UIControlEventTouchUpInside];
+                UIImageView *fbIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"FB-f-Logo__white_100.png"]];
+                [fbIcon setFrame:CGRectMake(5, 5, 30, 30)];
+                
+                [fbShare addSubview:fbIcon];
+                
+                
+                CALayer *btnLayer = [fbShare layer];
+                [btnLayer setMasksToBounds:YES];
+                [btnLayer setCornerRadius:4.0f];
+                
+                
+                
+                [pvc.view addSubview:fbShare];
+                [pvc.view addSubview:label];
+                
+            }
+        
+            else {
+                [pvc.view addSubview:pvc.tableView];
+            }
+            
+            
+        
+        }
+        
+        else if ([settings integerForKey:@"networks"] == 3) {
+            XBViewController1 *xvc = [[self tabBarController] viewControllers][0];
+            PSViewController *pvc = [[self tabBarController] viewControllers][1];
+            
+            
+            if ( [XBIDs count] == 0) {
+                
+                [xvc.tableView removeFromSuperview];
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, screen.size.width, 100)];
+                label.text = @"None of your Facebook friends were found in Xbox Live database. Share on Facebook and invite them!";
+                label.textAlignment = NSTextAlignmentCenter;
+                label.font = [UIFont fontWithName:@"Futura" size:14];
+                label.lineBreakMode = NSLineBreakByWordWrapping;
+                label.numberOfLines = 0;
+                label.bounds = CGRectInset(label.frame, 15.0f, 0);
+                
+                UIButton *fbShare = [[UIButton alloc] initWithFrame:CGRectMake(screen.size.width/2-63, screen.size.height/2+10, 125, 83)];
+                
+                fbShare.backgroundColor = [UIColor colorWithRed:59.0/255 green:89.0/255 blue:152.0/255 alpha:1];
+                
+                [fbShare setTitle:@"Share on Facebook" forState:UIControlStateNormal];
+                fbShare.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+                fbShare.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+                [fbShare setTitleEdgeInsets:UIEdgeInsetsMake(30, 0, 0, 35)];
+                fbShare.titleLabel.shadowOffset = CGSizeMake(2, 2);
+                fbShare.titleLabel.shadowColor = [UIColor darkGrayColor];
+                [fbShare setEnabled:YES];
+                [fbShare setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+                [fbShare setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+                [fbShare setAdjustsImageWhenDisabled:YES];
+                [fbShare setAdjustsImageWhenHighlighted:YES];
+                [fbShare addTarget:self action:@selector(shareLinkWithShareDialog:) forControlEvents:UIControlEventTouchUpInside];
+                UIImageView *fbIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"FB-f-Logo__white_100.png"]];
+                [fbIcon setFrame:CGRectMake(5, 5, 30, 30)];
+                
+                [fbShare addSubview:fbIcon];
+                
+                
+                CALayer *btnLayer = [fbShare layer];
+                [btnLayer setMasksToBounds:YES];
+                [btnLayer setCornerRadius:4.0f];
+                
+                
+                
+                [xvc.view addSubview:fbShare];
+                [xvc.view addSubview:label];
+                
+            }
+            else {
+                [xvc.view addSubview:xvc.tableView];
+                
+            }
+            
+            
+            
+            if ([PSIDs count] == 0) {
+                
+                [pvc.tableView removeFromSuperview];
+                
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, screen.size.width, 100)];
+                label.text = @"None of your Facebook friends were found in PSN database. Share on Facebook and invite them!";
+                label.textAlignment = NSTextAlignmentCenter;
+                label.font = [UIFont fontWithName:@"Futura" size:14];
+                label.lineBreakMode = NSLineBreakByWordWrapping;
+                label.numberOfLines = 0;
+                label.bounds = CGRectInset(label.frame, 15.0f, 0);
+                
+                UIButton *fbShare = [[UIButton alloc] initWithFrame:CGRectMake(screen.size.width/2-63, screen.size.height/2+10, 125, 83)];
+                
+                fbShare.backgroundColor = [UIColor colorWithRed:59.0/255 green:89.0/255 blue:152.0/255 alpha:1];
+                
+                [fbShare setTitle:@"Share on Facebook" forState:UIControlStateNormal];
+                fbShare.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+                fbShare.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+                [fbShare setTitleEdgeInsets:UIEdgeInsetsMake(30, 0, 0, 35)];
+                fbShare.titleLabel.shadowOffset = CGSizeMake(2, 2);
+                fbShare.titleLabel.shadowColor = [UIColor darkGrayColor];
+                [fbShare setEnabled:YES];
+                [fbShare setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+                [fbShare setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+                [fbShare setAdjustsImageWhenDisabled:YES];
+                [fbShare setAdjustsImageWhenHighlighted:YES];
+                [fbShare addTarget:self action:@selector(shareLinkWithShareDialog:) forControlEvents:UIControlEventTouchUpInside];
+                UIImageView *fbIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"FB-f-Logo__white_100.png"]];
+                [fbIcon setFrame:CGRectMake(5, 5, 30, 30)];
+                
+                [fbShare addSubview:fbIcon];
+                
+                
+                CALayer *btnLayer = [fbShare layer];
+                [btnLayer setMasksToBounds:YES];
+                [btnLayer setCornerRadius:4.0f];
+                
+                
+                
+                [pvc.view addSubview:fbShare];
+                [pvc.view addSubview:label];
+                
+                
+                
+            }
+            else {
+                [pvc.view addSubview:pvc.tableView];
+            }
+            
+            
+            
+        }
+
+    }
 }
 
 // function called when fail to web service
@@ -553,5 +810,27 @@ searchArray = [[NSMutableArray alloc] init];
 }];
 }
 
+- (void)refresh {
+    
+    if (platformUpdate == 2) {
+       
+        
+        [self setUpSearchIDs];
+        }
+
+}
+
+
+- (void)getReadyToUpdate {
+    
+    platformUpdate = 2;
+    
+}
+
+- (BOOL) connectedToInternet
+{
+    NSString *URLString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.google.com"]];
+    return ( URLString != NULL ) ? YES : NO;
+}
 
 @end

@@ -16,7 +16,14 @@
     
     NSString *url = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
     _myURL = url;
+    NSLog(@"%@", _myURL);
     
+}
+
+-(NSString *)returnURL {
+    
+    NSLog(@"%@", _myURL);
+    return _myURL;
 }
 
 @end

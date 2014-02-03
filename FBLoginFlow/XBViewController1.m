@@ -36,6 +36,7 @@
         _finalSortedFriendInfo = [[NSArray alloc] init];
 
 
+
     }
     return self;
 }
@@ -45,12 +46,11 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
  
-    FBRequest* request = [FBRequest requestForMyFriends];
     
    // request.parameters[@"fields"] =
    // [NSString stringWithFormat:@"%@, installed",request.parameters[@"fields"]];
     
-  
+  FBRequest* request = [FBRequest requestForMyFriends];
     
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         
@@ -96,7 +96,7 @@
 
     
     //self.fieldsForRequest = [NSSet setWithObjects:@"devices", nil];
-    [self loadData];
+    //[self loadData];
     
 
     UIImageView *titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"XboxLIVE_RGBvectorKO_horizontal_2013.png"]];
@@ -247,7 +247,7 @@
         }];*/
         
    // }
-    
+
     return reverseName;
     
     

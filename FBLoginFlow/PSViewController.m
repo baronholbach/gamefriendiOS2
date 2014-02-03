@@ -47,6 +47,40 @@
     
     FBRequest* request = [FBRequest requestForMyFriends];
     
+    
+    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        
+        
+        /*for(id<FBGraphUser> user in result[@"data"])
+         {
+         if ([user.last_name characterAtIndex:0] >= (int)'M') {
+         
+         NSString *curName = [[NSString alloc] initWithFormat:@"%@, %@, %@", user.last_name, user.name, user.id];
+         
+         
+         [_sortedFriendInfo addObject:curName]; }
+         
+         
+         
+         
+         }*/
+        
+        //_sortedFriendInfo  = [self alphaSort:_curFriendInfo];
+        
+        
+        //NSLog(@"%@", _sortedArray);
+        // _finalSortedFriendInfo = [self nameSwap:_sortedArray];
+        
+        
+        
+        
+        
+        
+        for(id username in _sortedFriendInfo) {
+            
+        }
+    }];
+
     // request.parameters[@"fields"] =
     // [NSString stringWithFormat:@"%@, installed",request.parameters[@"fields"]];
     
@@ -81,7 +115,7 @@
     self.delegate = self;
     self.tableView.delegate = self;
     
-    [self loadData];
+    //[self loadData];
     
     
     UIImageView *titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"PlayStation_Network_2013.png"]];

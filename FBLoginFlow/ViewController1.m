@@ -49,7 +49,9 @@ int currentSeq = 0;
     
     // initialize view controllers
     xvc =[[XBViewController1 alloc] init];
+    [xvc setSortOrdering:FBFriendSortByLastName];
     pvc = [[PSViewController alloc]  init];
+    [pvc setSortOrdering:FBFriendSortByLastName];
     svc =[[settingsViewController alloc] init];
     
 }
@@ -80,6 +82,7 @@ int currentSeq = 0;
     FBRequest* request = [FBRequest requestForMyFriends];
     searchIDs =  [[NSMutableString alloc] init];
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
+    
     
     // Set up string of friends to send to search against database
     
@@ -631,6 +634,120 @@ int currentSeq = 0;
     [xvc setTokenData:tokenData];
     [pvc setTokenData:tokenData];
 
+    xvc.view.backgroundColor = [UIColor whiteColor];
+    pvc.view.backgroundColor = [UIColor whiteColor];
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    
+    NSMutableArray *PSIDs = [[NSMutableArray alloc] init];
+    NSMutableArray *XBIDs = [[NSMutableArray alloc] init];
+    for (GamerToken *token in tokenData.tokens) {
+        
+        if (![token.PlayStationID isEqualToString:@""]) {
+        [PSIDs addObject:token.PlayStationID];
+        }
+        
+        if (![token.XBoxID isEqualToString:@""]) {
+        [XBIDs addObject:token.XBoxID];
+        }
+    }
+    
+    
+    
+    
+    if ( [XBIDs count] == 0) {
+
+        [xvc.tableView removeFromSuperview];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, screen.size.width, 100)];
+        label.text = @"None of your Facebook friends were found in Xbox Live database. Share on Facebook and invite them!";
+        label.textAlignment = NSTextAlignmentCenter;
+        label.font = [UIFont fontWithName:@"Futura" size:14];
+        label.lineBreakMode = NSLineBreakByWordWrapping;
+        label.numberOfLines = 0;
+        label.bounds = CGRectInset(label.frame, 15.0f, 0);
+        
+        UIButton *fbShare = [[UIButton alloc] initWithFrame:CGRectMake(screen.size.width/2-63, screen.size.height/2+10, 125, 83)];
+ 
+        fbShare.backgroundColor = [UIColor colorWithRed:59.0/255 green:89.0/255 blue:152.0/255 alpha:1];
+        
+        [fbShare setTitle:@"Share on Facebook" forState:UIControlStateNormal];
+        fbShare.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+        fbShare.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        [fbShare setTitleEdgeInsets:UIEdgeInsetsMake(30, 0, 0, 35)];
+        fbShare.titleLabel.shadowOffset = CGSizeMake(2, 2);
+        fbShare.titleLabel.shadowColor = [UIColor darkGrayColor];
+        [fbShare setEnabled:YES];
+        [fbShare setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+        [fbShare setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [fbShare setAdjustsImageWhenDisabled:YES];
+        [fbShare setAdjustsImageWhenHighlighted:YES];
+        [fbShare addTarget:svc action:@selector(shareLinkWithShareDialog:) forControlEvents:UIControlEventTouchUpInside];
+        UIImageView *fbIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"FB-f-Logo__white_100.png"]];
+        [fbIcon setFrame:CGRectMake(5, 5, 30, 30)];
+        
+        [fbShare addSubview:fbIcon];
+        
+        
+        CALayer *btnLayer = [fbShare layer];
+        [btnLayer setMasksToBounds:YES];
+        [btnLayer setCornerRadius:4.0f];
+        
+
+        
+        [xvc.view addSubview:fbShare];
+        [xvc.view addSubview:label];
+        
+    }
+    
+    if ([PSIDs count] == 0) {
+        
+        [pvc.tableView removeFromSuperview];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, screen.size.width, 100)];
+        label.text = @"None of your Facebook friends were found in PSN database. Share on Facebook and invite them!";
+        label.textAlignment = NSTextAlignmentCenter;
+        label.font = [UIFont fontWithName:@"Futura" size:14];
+        label.lineBreakMode = NSLineBreakByWordWrapping;
+        label.numberOfLines = 0;
+        label.bounds = CGRectInset(label.frame, 15.0f, 0);
+        
+        UIButton *fbShare = [[UIButton alloc] initWithFrame:CGRectMake(screen.size.width/2-63, screen.size.height/2+10, 125, 83)];
+        
+        fbShare.backgroundColor = [UIColor colorWithRed:59.0/255 green:89.0/255 blue:152.0/255 alpha:1];
+        
+        [fbShare setTitle:@"Share on Facebook" forState:UIControlStateNormal];
+        fbShare.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+        fbShare.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        [fbShare setTitleEdgeInsets:UIEdgeInsetsMake(30, 0, 0, 35)];
+        fbShare.titleLabel.shadowOffset = CGSizeMake(2, 2);
+        fbShare.titleLabel.shadowColor = [UIColor darkGrayColor];
+        [fbShare setEnabled:YES];
+        [fbShare setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+        [fbShare setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [fbShare setAdjustsImageWhenDisabled:YES];
+        [fbShare setAdjustsImageWhenHighlighted:YES];
+        [fbShare addTarget:svc action:@selector(shareLinkWithShareDialog:) forControlEvents:UIControlEventTouchUpInside];
+        UIImageView *fbIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"FB-f-Logo__white_100.png"]];
+        [fbIcon setFrame:CGRectMake(5, 5, 30, 30)];
+        
+        [fbShare addSubview:fbIcon];
+        
+        
+        CALayer *btnLayer = [fbShare layer];
+        [btnLayer setMasksToBounds:YES];
+        [btnLayer setCornerRadius:4.0f];
+        
+        
+        
+        [pvc.view addSubview:fbShare];
+        [pvc.view addSubview:label];
+
+        
+        
+    }
+    
+    
+
+
     [xvc loadData];
     [pvc loadData];
 }
@@ -671,4 +788,10 @@ int currentSeq = 0;
     return (newLength > 16) ? NO : YES;
 }
 
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+             [[NSNotificationCenter defaultCenter]
+              postNotificationName:@"touchEventFromCell" object:event];
+             [super touchesBegan:touches withEvent:event];
+         
+}
 @end

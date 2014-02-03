@@ -12,4 +12,6 @@
 
 @property NSString *myURL;
 
+-(NSString *) returnURL;
+
 @end
