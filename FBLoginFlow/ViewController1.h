@@ -16,7 +16,7 @@
 @class settingsViewController;
 
 
-@interface ViewController1 : UIViewController <UIPickerViewDataSource,UIPickerViewDelegate, NSXMLParserDelegate,FBLoginViewDelegate, UITextFieldDelegate>
+@interface ViewController1 : UIViewController <UIPickerViewDataSource,UIPickerViewDelegate, NSXMLParserDelegate,FBLoginViewDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 {
     // web service related objects
     NSURLConnection *connection;
@@ -44,12 +44,14 @@
 @property UINavigationBar *navBar;
 @property UINavigationItem *navItem;
 @property XBViewController1 *xvc;
+@property FBLoginView *loginView;
 
 
 @property (strong, nonatomic) NSArray *networkOptions;
 @property (weak, nonatomic) IBOutlet UIButton *confirmButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property NSString *myFBID;
+
 
 - (IBAction)clickBasicShare:(id)sender;
 - (IBAction)clickFriends:(id)sender;
@@ -60,6 +62,6 @@
 - (void)fetchGamerTokens;
 - (void)xboxBack;
 - (void)psBack;
-    
+- (BOOL)connectedToInternet;
 
 @end

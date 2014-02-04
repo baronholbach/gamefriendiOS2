@@ -6,10 +6,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
-        <!--View Controller1-->
+        <!--ViewController1-->
         <scene sceneID="5">
             <objects>
-                <viewController storyboardIdentifier="ViewController1" id="2" customClass="ViewController1" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController1" id="2" userLabel="ViewController1" customClass="ViewController1" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

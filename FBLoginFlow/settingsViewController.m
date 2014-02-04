@@ -754,9 +754,9 @@ static NSUserDefaults *settings;
     xmlData = nil;
     
     // show alert view
-    NSString *errorString = [NSString stringWithFormat:@"Fetch failed: %@", [error localizedDescription]];
+ /*   NSString *errorString = [NSString stringWithFormat:@"Fetch failed: %@", [error localizedDescription]];
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [av show];
+    [av show];*/
 }
 
 /////////////////////////////////////////////////
@@ -827,10 +827,5 @@ searchArray = [[NSMutableArray alloc] init];
     
 }
 
-- (BOOL) connectedToInternet
-{
-    NSString *URLString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.google.com"]];
-    return ( URLString != NULL ) ? YES : NO;
-}
 
 @end

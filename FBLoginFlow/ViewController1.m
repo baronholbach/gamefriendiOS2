@@ -54,20 +54,31 @@ int currentSeq = 0;
     [pvc setSortOrdering:FBFriendSortByLastName];
     svc =[[settingsViewController alloc] init];
     
+   
+ /*   if (![self connectedToInternet]) {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Could not find Game Friend Finder server. Please make sure you are connected to the Internet and try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+        
+    }*/
 }
 
 
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView {
-    
+
     }
 
 
 -(void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView {
+    if ([self connectedToInternet]) 
     [self.view addSubview:loginView];
+    
+
 }
 
 -(void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
 {
+   
+    if ([self connectedToInternet]) {
     if (cachedUser == FALSE) {
         cachedUser = TRUE;
        self.myFBID = [NSString stringWithFormat:@"%@", [user id]];
@@ -232,7 +243,7 @@ int currentSeq = 0;
    
    }
     
-    
+    }
     
 }
 
@@ -759,9 +770,9 @@ int currentSeq = 0;
     xmlData = nil;
     
     // show alert view
-    NSString *errorString = [NSString stringWithFormat:@"Fetch failed: %@", [error localizedDescription]];
+  /*  NSString *errorString = [NSString stringWithFormat:@"Fetch failed: %@", [error localizedDescription]];
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [av show];
+    [av show];*/
 }
 
 /////////////////////////////////////////////////
@@ -794,4 +805,12 @@ int currentSeq = 0;
              [super touchesBegan:touches withEvent:event];
          
 }
+
+- (BOOL) connectedToInternet
+{
+    NSString *URLString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.apsgames.com"] encoding:NSUTF8StringEncoding error:nil];
+    return ( URLString != NULL ) ? YES : NO;
+}
+
+
 @end
