@@ -339,7 +339,7 @@ static NSUserDefaults *settings;
     params.link = [NSURL URLWithString:myURL];
     params.name = @"Game Friend Finder";
     params.caption = @"For PSN and Xbox Live.";
-    params.picture = [NSURL URLWithString:@"http://i.imgur.com/g3Qc1HN.png"];
+    params.picture = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/gff_icon_256_rounded14.png"];
     params.description = @"Check out this app that lets you find all your friends on Xbox Live and PSN instantly!";
     
     
@@ -383,7 +383,7 @@ static NSUserDefaults *settings;
                                        @"For PSN and Xbox Live", @"caption",
                                        @"Check out this app that lets you find all your friends on Xbox Live and PSN instantly!", @"description",
                                        [_urlRec returnURL], @"link",
-                                       @"http://i.imgur.com/g3Qc1HN.png", @"picture",
+                                       @"http://www.apsgames.com/gamefinder/gff_icon_256_rounded14.png", @"picture",
                                        nil];
 
         
