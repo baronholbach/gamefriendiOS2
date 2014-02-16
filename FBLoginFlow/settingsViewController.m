@@ -55,6 +55,7 @@ static NSUserDefaults *settings;
         
         _urlRec = [[ShareURLReceiver alloc] init];
         connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:_urlRec startImmediately:YES];
+
         
         
     }
@@ -128,7 +129,7 @@ static NSUserDefaults *settings;
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
     
-    if ([textField.text isEqualToString:@""]) {
+    if ([textField.text isEqualToString:@""]) {  // if you press enter when the field is blank
     
         if (textField == _psEntry) {
         
@@ -171,33 +172,26 @@ static NSUserDefaults *settings;
     
     }
     
-    else {
+    else {     // if textfield is not currently blank
         
         if (textField == _psEntry) {
             
             
-        if ([textField.text isEqualToString:[settings stringForKey:@"psEntry"]]) {
-                    _nextPSEntry = textField.text;
+            if ([textField.text isEqualToString:[settings stringForKey:@"psEntry"]]) {
+                        _nextPSEntry = textField.text;
+            }
+            else {
                 
+                _nextPSEntry = textField.text;
+                
+                _psAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Are you sure you want to update Online ID?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+                [_psAlert show];
+                
+                
+            }
 
-                    
-                }
-        else {
-            
-            _nextPSEntry = textField.text;
-            
-            _psAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Are you sure you want to update Online ID?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
-            [_psAlert show];
-            
             
         }
-                
-            
-            
-            
-
-            
-}
         
         
         else if (textField == _xbEntry) {
@@ -259,28 +253,26 @@ static NSUserDefaults *settings;
             [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"xbid=%@&fbid=%@", [settings objectForKey:@"xbEntry"], fbid] UTF8String] length:strlen([[NSString stringWithFormat:@"xbid=%@&fbid=%@", [settings objectForKey:@"xbEntry"], fbid] UTF8String])]];
             connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
             _xbEntry.clearsOnBeginEditing = NO;
+            
+                if ([settings integerForKey:@"networks"] == 1)  // if there is not yet an xbox gamertag registered
+                {
+                    [settings setInteger:3 forKey:@"networks"];
+                    
+                    XBViewController1 *xvc = [[XBViewController1 alloc] init];
+                    NSArray *xbtabArray = [[self tabBarController] viewControllers];
+                    NSArray *xbaddView = [NSArray arrayWithObjects:xvc, xbtabArray[0], xbtabArray[1], nil];
+                    [[self tabBarController] setViewControllers:xbaddView animated:NO];
+                    [self setUpSearchIDs];
+                     platformUpdate = 1;
+                }
             }
         
-        if ([settings integerForKey:@"networks"] == 1)
-        {
-            [settings setInteger:3 forKey:@"networks"];
-            
-            XBViewController1 *xvc = [[XBViewController1 alloc] init];
-            NSArray *xbtabArray = [[self tabBarController] viewControllers];
-            NSArray *xbaddView = [NSArray arrayWithObjects:xvc, xbtabArray[0], xbtabArray[1], nil];
-            [[self tabBarController] setViewControllers:xbaddView animated:NO];
-            [self setUpSearchIDs];
-             platformUpdate = 1;
-        }
-    
-    }
-    
-    
             else if (buttonIndex == 0) {
                 _xbEntry.text = [settings objectForKey:@"xbEntry"];
             }
+    }
     
-        
+    
         else {  // if you updated the PSN ID box
             
             if (buttonIndex == 1) {
@@ -299,22 +291,21 @@ static NSUserDefaults *settings;
             [req2 setHTTPMethod:@"POST"];
             
             
-            [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"psid=%@&fbid=%@", [settings objectForKey:@"psEntry"], fbid] UTF8String] length:strlen([[NSString stringWithFormat:@"psid=%@&fbid=%@", [settings objectForKey:@"psEntry"], fbid]UTF8String])]];
+            [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"psid=%@&fbid=%@", [settings objectForKey:@"psEntry"], fbid] UTF8String] length:strlen([[NSString stringWithFormat:@"psid=%@&fbid=%@", [settings objectForKey:@"psEntry"], fbid] UTF8String])]];
             
                 connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
             _psEntry.clearsOnBeginEditing = NO;
-                NSLog(@"%d", [settings integerForKey:@"networks"]);
                 
-            if ([settings integerForKey:@"networks"] == 0)
-            {
-                [settings setInteger:3 forKey:@"networks"];
-                PSViewController *pvc = [[PSViewController alloc] init];
-                NSArray *tabArray = [[self tabBarController] viewControllers];
-                NSArray *addView = [NSArray arrayWithObjects:tabArray[0], pvc, tabArray[1], nil];
-                [[self tabBarController] setViewControllers:addView animated:NO];
-                [self setUpSearchIDs];
-                platformUpdate = 0;
-            }
+                if ([settings integerForKey:@"networks"] == 0)
+                    {
+                        [settings setInteger:3 forKey:@"networks"];
+                        PSViewController *pvc = [[PSViewController alloc] init];
+                        NSArray *tabArray = [[self tabBarController] viewControllers];
+                        NSArray *addView = [NSArray arrayWithObjects:tabArray[0], pvc, tabArray[1], nil];
+                        [[self tabBarController] setViewControllers:addView animated:NO];
+                        [self setUpSearchIDs];
+                        platformUpdate = 0;
+                    }
             }
             
             else if (buttonIndex == 0) {
@@ -333,7 +324,7 @@ static NSUserDefaults *settings;
     
     
     // Check if the Facebook app is installed and we can present the share dialog
-    FBShareDialogParams *params = [[FBShareDialogParams alloc] init];
+ /*   FBShareDialogParams *params = [[FBShareDialogParams alloc] init];
 
     NSString *myURL = [_urlRec returnURL];
     params.link = [NSURL URLWithString:myURL];
@@ -345,10 +336,7 @@ static NSUserDefaults *settings;
     
     // If the Facebook app is installed and we can present the share dialog
     if ([FBDialogs canPresentShareDialogWithParams:params]) {
-        
-        
-
-        
+     
         
         // Present share dialog
         [FBDialogs presentShareDialogWithLink:params.link
@@ -367,9 +355,9 @@ static NSUserDefaults *settings;
                                               NSLog(@"result %@", results);
                                           }
                                       }];
-        
+
         // If the Facebook app is NOT installed and we can't present the share dialog
-    } else {
+    } else {*/
         // FALLBACK: publish just a link using the Feed dialog
         
         // Put together the dialog parameters
@@ -415,7 +403,7 @@ static NSUserDefaults *settings;
                                                           }
                                                       }
                                                   }];
-    }
+   // }
 }
 
 // A function for parsing URL parameters returned by the Feed Dialog.
@@ -499,11 +487,11 @@ static NSUserDefaults *settings;
     if (platformUpdate == 1) {
     [[[self tabBarController] viewControllers][0] setTokenData:tokenData];
         [[[self tabBarController] viewControllers][0] loadData];}
-    
+    /*
     
     else if (platformUpdate == 0) {
     [[[self tabBarController] viewControllers][1] setTokenData:tokenData];
-        [[[self tabBarController] viewControllers][1] loadData]; }
+        [[[self tabBarController] viewControllers][1] loadData]; }*/
     
     else if (platformUpdate == 2) {
         [[[self tabBarController] viewControllers][0] setTokenData:tokenData];
