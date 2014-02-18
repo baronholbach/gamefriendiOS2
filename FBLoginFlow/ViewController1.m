@@ -54,10 +54,8 @@ int currentSeq = 0;
     [pvc setSortOrdering:FBFriendSortByLastName];
     svc =[[settingsViewController alloc] init];
     
-
-    
-   /*
-    if (![self connectedToInternet]) {
+   
+ /*   if (![self connectedToInternet]) {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Could not find Game Friend Finder server. Please make sure you are connected to the Internet and try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
         
@@ -66,8 +64,7 @@ int currentSeq = 0;
 
 
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView {
-    loginView.hidden = YES;
- 
+
     }
 
 
@@ -368,12 +365,10 @@ int currentSeq = 0;
 
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
-
-    if (currentSeq == 2)  {  // if you're on the first entry of the "Both" flow
-        _nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextPressed:)];
-    [_navItem setRightBarButtonItem:_nextButton];
-    }
-
+    
+    if (currentSeq == 2)
+        _nextButton.hidden = NO;
+    
     
     else {
     
@@ -402,9 +397,6 @@ int currentSeq = 0;
 
 
 -(IBAction)confirmPressed:(id)sender  {  //Entered your game network username, intro sequence
-    _networkPicker.hidden = 1;
-    _uiLabel.hidden = 1;
-    
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
     
     //////COMMENTED OUT FOR DEV PURPOSES.
@@ -495,59 +487,12 @@ int currentSeq = 0;
     
     //self.uiLabel.hidden = 1;
 
-    [UIView animateWithDuration:0.5 animations:^{
-        
-        _networkPicker.frame = CGRectOffset(_networkPicker.frame, -480, 0);
-        _xbEntry.frame = CGRectOffset(_xbEntry.frame, -515, 0);
-        _xbLabel.frame = CGRectOffset(_xbLabel.frame, -485, 0);
-        _uiLabel.frame = CGRectOffset(_uiLabel.frame, -485, 0);
-        _psEntry.frame = CGRectOffset(_psEntry.frame, -515, 0);
-        _psLabel.frame = CGRectOffset(_psLabel.frame, -462, 0);
-        
-        
-        
-    }];
     
+        [self psPicked];
+        _nextButton.hidden = YES;
     currentSeq = 3;
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(psAndXboxBack)];
-    [_navItem setLeftBarButtonItem:backButton];
-    
-    if ([_psEntry.text isEqualToString:@""] || [_psEntry.text isEqualToString:@"PSN ID"])
-        [_navItem setRightBarButtonItem:nil];
-    
-    else {
-        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(confirmPressed:)];
-    [_navItem setRightBarButtonItem:doneButton];
-    
-    }
-    
-    [_xbEntry resignFirstResponder];
 }
 
-- (void)psAndXboxBack {
-    [UIView animateWithDuration:0.5 animations:^{
-        
-        _networkPicker.frame = CGRectOffset(_networkPicker.frame, 480, 0);
-        _psEntry.frame = CGRectOffset(_psEntry.frame, 515, 0);
-        _psLabel.frame = CGRectOffset(_psLabel.frame, 462, 0);
-        _uiLabel.frame = CGRectOffset(_uiLabel.frame, 485, 0);
-        _xbEntry.frame = CGRectOffset(_xbEntry.frame, 515, 0);
-        _xbLabel.frame = CGRectOffset(_xbLabel.frame, 485, 0);
-        
-        
-    }];
-    
-    
-    _nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextPressed:)];
-    [_navItem setRightBarButtonItem:_nextButton];
-    _backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(xboxBack)];
-    [_navItem setLeftBarButtonItem:_backButton];
-    currentSeq = 2;
-    
-    
-    
-    [_psEntry resignFirstResponder];
-}
 
 
 -(void)xboxPicked {
@@ -591,35 +536,17 @@ int currentSeq = 0;
     
 }
 
-- (void)psBack {
-    [UIView animateWithDuration:0.5 animations:^{
-        
-        _networkPicker.frame = CGRectOffset(_networkPicker.frame, 480, 0);
-        _psEntry.frame = CGRectOffset(_psEntry.frame, 518, 0);
-        _psLabel.frame = CGRectOffset(_psLabel.frame, 470, 0);
-        
-        
-        
-    }];
-    
-    [_psEntry resignFirstResponder];
-    self.navBar.hidden = 1;
-    self.uiLabel.hidden = 0;
-    
-}
-
 
 
 -(void)psPicked {
+    self.uiLabel.hidden = 1;
     
     if (currentSeq != 2) {
     
     [UIView animateWithDuration:0.5 animations:^{
         self.networkPicker.frame = CGRectOffset(self.networkPicker.frame, -480, 0);
-        _psEntry.frame = CGRectOffset(_psEntry.frame, -518, 0);
-        _psLabel.frame = CGRectOffset(_psLabel.frame, -462, 0);
-        _uiLabel.frame = CGRectOffset(_uiLabel.frame, -485, 0);
-        [_psEntry setAdjustsFontSizeToFitWidth:YES];
+        _psEntry.frame = CGRectOffset(_psEntry.frame, -520, 0);
+        _psLabel.frame = CGRectOffset(_psLabel.frame, -470, 0);
         
         self.navBar.hidden = 0;
         
@@ -634,16 +561,29 @@ int currentSeq = 0;
     else {
         [UIView animateWithDuration:0.5 animations:^{
             _psEntry.frame = CGRectOffset(_psEntry.frame, -520, 0);
-            _psLabel.frame = CGRectOffset(_psLabel.frame, -462, 0);
+            _psLabel.frame = CGRectOffset(_psLabel.frame, -468, 0);
             _xbLabel.frame = CGRectOffset(_xbLabel.frame, -485, 0);
             _xbEntry.frame = CGRectOffset(_xbEntry.frame, -485, 0);
-            _uiLabel.frame = CGRectOffset(_uiLabel.frame, -485, 0);
         }];
     }
 }
 
 
-
+- (void)psBack {
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        _networkPicker.frame = CGRectOffset(_networkPicker.frame, 480, 0);
+        _psEntry.frame = CGRectOffset(_psEntry.frame, 515, 0);
+        _psLabel.frame = CGRectOffset(_psLabel.frame, 485, 0);
+        _uiLabel.frame = CGRectOffset(_uiLabel.frame, 485, 0);
+        
+        
+    }];
+    
+    [_psEntry resignFirstResponder];
+    self.navBar.hidden = 1;
+    
+}
 
 /////////////////////////////////////
 // Web service methods

@@ -16,7 +16,6 @@
 @synthesize myID;
 @synthesize myName;
 @synthesize myProfileImage;
-@synthesize prevCell;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -48,6 +47,5 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     self.navigationController.navigationBar.hidden = YES;
-    self.prevCell.backgroundColor = [UIColor clearColor];
 }
 @end

@@ -18,7 +18,6 @@
 @property NSArray *sortedArray;
 @property GamerTokens *tokenData;
 
-
 //- (NSArray *) alphaSort:(NSArray *)array;
 - (NSString *) nameSwap:(NSString *)array;
 

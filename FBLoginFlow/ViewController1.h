@@ -45,11 +45,11 @@
 @property UINavigationItem *navItem;
 @property XBViewController1 *xvc;
 @property FBLoginView *loginView;
-@property UIBarButtonItem *nextButton;
-@property UIBarButtonItem *backButton;
 
 
 @property (strong, nonatomic) NSArray *networkOptions;
+@property (weak, nonatomic) IBOutlet UIButton *confirmButton;
+@property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property NSString *myFBID;
 
 
@@ -62,10 +62,6 @@
 - (void)fetchGamerTokens;
 - (void)xboxBack;
 - (void)psBack;
-- (void)psNext;
-- (void)psAndXboxBack;
 - (BOOL)connectedToInternet;
-
-
 
 @end

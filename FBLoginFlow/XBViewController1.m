@@ -36,6 +36,7 @@
         _finalSortedFriendInfo = [[NSArray alloc] init];
 
 
+
     }
     return self;
 }
@@ -85,8 +86,6 @@
     }];
 
 
-
-    
     
     [self setSortOrdering:FBFriendSortByLastName];
     
@@ -110,10 +109,10 @@
  
  
     
-    [self.tableView setFrame:CGRectMake(0, 50, self.view.frame.size.width, self.view.frame.size.height-100)];
-    [self.tableView setSectionHeaderHeight:0];
+    [self.tableView setFrame:CGRectMake(0, 50, self.view.frame.size.width, self.view.frame.size.height-50)];
+    
 
- 
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -175,18 +174,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    cell.backgroundColor = [UIColor lightGrayColor];
-    
-
     _sortedArray = [[NSArray alloc] initWithArray:[_sortedFriendInfo sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]];
-
     XBSelectedRow *xbr = [[XBSelectedRow alloc] init];
-    xbr.prevCell = cell;
     [[self navigationController] pushViewController:xbr animated:YES];
-
-    
     self.navigationController.navigationBar.hidden = 0;
     int rowTotal = 0;
     for (int i=0; i < indexPath.section; i++) {
@@ -203,7 +193,6 @@
     NSLog(@"%@", splitName[2]);
     [xbr setMyProfileImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
     [xbr setMyID:splitName[3]];
-
 }
 
 /*
@@ -263,11 +252,6 @@
     
     
 }
-
-
-
-
-
 
 
 @end
