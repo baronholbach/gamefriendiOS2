@@ -16,5 +16,6 @@
 @property NSString *myName;
 @property NSString *myID;
 @property UIImage *myProfileImage;
+@property UITableViewCell *prevCell;
 
 @end
