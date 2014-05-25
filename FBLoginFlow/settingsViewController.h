@@ -18,7 +18,7 @@
     
     
     NSMutableData *xmlData;
-    GamerTokens *tokenData;
+    //GamerTokens *tokenData;
     NSMutableString *searchIDs;
     NSMutableArray *searchArray;
     
@@ -36,6 +36,7 @@
 @property UIAlertView *psAlert;
 @property NSString *fbURL;
 @property ShareURLReceiver *urlRec;
+@property GamerTokens *tokenData;
 
 - (IBAction)shareLinkWithShareDialog:(id)sender;
 - (NSDictionary*)parseURLParams:(NSString *)query;
@@ -43,6 +44,6 @@
 - (void)fetchGamerTokens;
 - (void)refresh;
 - (void)getReadyToUpdate;
-- (BOOL) connectedToInternet;
+//- (BOOL) connectedToInternet;
 
 @end

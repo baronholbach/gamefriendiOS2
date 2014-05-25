@@ -25,6 +25,7 @@ static NSUserDefaults *settings;
 @implementation settingsViewController
 
 @synthesize fbid;
+@synthesize tokenData;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

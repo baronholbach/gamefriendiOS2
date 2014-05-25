@@ -26,7 +26,6 @@
     return YES;
 }
 
-
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
