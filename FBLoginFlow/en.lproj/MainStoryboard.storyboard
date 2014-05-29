@@ -29,9 +29,7 @@
                                     <constraint firstAttribute="height" constant="88" id="JKd-rR-rj1"/>
                                     <constraint firstAttribute="width" constant="101" id="bsW-rZ-VWp"/>
                                 </constraints>
-                                <state key="normal" title="Button" image="400_F_32161739_cLQcViNu7WgHC3yjBDP5sanGGBRRkmtC.jpg">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                               
                                 <connections>
                                     <action selector="nextPressed:" destination="2" eventType="touchUpInside" id="vH4-sD-R4F"/>
                                 </connections>
@@ -194,7 +192,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="400_F_32161739_cLQcViNu7WgHC3yjBDP5sanGGBRRkmtC.jpg" width="400" height="400"/>
+
         <image name="gff_logo.png" width="1146" height="279"/>
         <image name="gradient.png" width="46" height="71"/>
     </resources>
