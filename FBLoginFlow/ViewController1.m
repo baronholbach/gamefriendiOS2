@@ -336,8 +336,9 @@ int currentSeq = 0;
     switch (row) {
         case 0:
         {
-            [self xboxPicked];
+            
             currentSeq = 0;
+            [self xboxPicked];
         }
         break;
     
@@ -345,16 +346,16 @@ int currentSeq = 0;
         case 1:
         {
             
-            [self psPicked];
             currentSeq = 1;
+            [self psPicked];
     }
     
             break;
         
         case 2:
-            
-        [self xboxPicked];
+        
         currentSeq = 2;
+        [self xboxPicked];
         
             
             break;
@@ -596,7 +597,7 @@ int currentSeq = 0;
         
         _networkPicker.frame = CGRectOffset(_networkPicker.frame, 480, 0);
         _psEntry.frame = CGRectOffset(_psEntry.frame, 518, 0);
-        _psLabel.frame = CGRectOffset(_psLabel.frame, 470, 0);
+        _psLabel.frame = CGRectOffset(_psLabel.frame, 462, 0);
         
         
         

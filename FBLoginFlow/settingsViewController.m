@@ -184,7 +184,7 @@ static NSUserDefaults *settings;
                 
                 _nextPSEntry = textField.text;
                 
-                _psAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Are you sure you want to update Online ID?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+                _psAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Are you sure you want to update PSN Online ID?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
                 [_psAlert show];
                 
                 
@@ -369,7 +369,7 @@ static NSUserDefaults *settings;
         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                        @"Game Friend Finder", @"name",
                                        @"For PSN and Xbox Live", @"caption",
-                                       @"Check out this app that lets you find all your friends on Xbox Live and PSN instantly!", @"description",
+                                       @"Check out this app that helps you find all your Facebook friends on Xbox Live and PSN!", @"description",
                                        [_urlRec returnURL], @"link",
                                        @"http://www.apsgames.com/gamefinder/gff_icon_256_rounded14.png", @"picture",
                                        nil];
