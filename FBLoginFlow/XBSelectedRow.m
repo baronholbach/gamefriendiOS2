@@ -16,6 +16,7 @@
 @implementation XBSelectedRow
 @synthesize myID;
 @synthesize myName;
+@synthesize myGame;
 @synthesize myProfileImage;
 @synthesize prevCell;
 
@@ -31,6 +32,10 @@
 - (void)viewWillAppear:(BOOL)animated  {
     self.nameLabel.text =  myName;
     self.idLabel.text = myID;
+    
+    if (![myGame isEqualToString:@" "]) {
+        self.gameLabel.text = myGame;
+    }
 
 }
 

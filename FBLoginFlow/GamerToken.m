@@ -9,7 +9,7 @@
 #import "GamerToken.h"
 
 @implementation GamerToken
-@synthesize FaceBookID, XBoxID, PlayStationID, parentParserDelegate;
+@synthesize FaceBookID, XBoxID, PlayStationID, FavGame, parentParserDelegate;
 
 //////////////////////////////////////////
 // NSXMLParserDelegate method overrides
@@ -27,6 +27,7 @@
     {
         currentString = [[NSMutableString alloc] init];
         [self setXBoxID:currentString];
+        NSLog(@"%@", self.XBoxID);
         
         
 
@@ -35,6 +36,13 @@
     {
         currentString = [[NSMutableString alloc] init];
         [self setPlayStationID:currentString];
+        NSLog(@"%@", self.PlayStationID);
+    }
+    
+    else if ([elementName isEqual:@"FAVGAME"])
+    {
+        currentString = [[NSMutableString alloc] init];
+        [self setFavGame:currentString];
     }
 
 }

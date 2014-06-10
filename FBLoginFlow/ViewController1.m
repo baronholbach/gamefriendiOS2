@@ -87,7 +87,7 @@ int currentSeq = 0;
        self.myFBID = [NSString stringWithFormat:@"%@", [user id]];
     [svc setFbid:[user id]];
     NSLog(@"user info fetched!");
-    
+    _fullname = [NSString stringWithString:[user name]];
     
     self.networkPicker.hidden = 0;
     
@@ -96,7 +96,8 @@ int currentSeq = 0;
     FBRequest* request = [FBRequest requestForMyFriends];
     searchIDs =  [[NSMutableString alloc] init];
     NSUserDefaults *setting = [[NSUserDefaults alloc] init];
-    
+   // [self commitToken:[setting stringForKey:@"deviceToken"]];
+        
     
     // Set up string of friends to send to search against database
     
@@ -116,7 +117,7 @@ int currentSeq = 0;
             
             [searchIDs deleteCharactersInRange:NSMakeRange([searchIDs length] - 1, 1)];
         }
-        
+        //NSLog(@"%@", searchIDs);
         // Send request to database
         
         if (self) {
@@ -656,6 +657,7 @@ int currentSeq = 0;
     
     // initialize holder for data coming back from server
     xmlData = [[NSMutableData alloc] init];
+    NSUserDefaults *setting = [[NSUserDefaults alloc] init];
     
     
     //construct an URL
@@ -667,10 +669,12 @@ int currentSeq = 0;
     [req setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     
     [req setHTTPMethod:@"POST"];
-    [req setHTTPBody:[NSData dataWithBytes:[searchIDs UTF8String] length:strlen([searchIDs UTF8String])]];
+    [req setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"%@&fullname=%@&devToken=%@&fbid=%@", searchIDs, _fullname, [setting stringForKey:@"deviceToken"], _myFBID] UTF8String] length:strlen([[NSString stringWithFormat:@"%@&fullname=%@&devToken=%@&fbid=%@", searchIDs, _fullname, [setting stringForKey:@"deviceToken"], _myFBID ] UTF8String])]];
+    
     
     //Create a connection
     connection = [[NSURLConnection alloc] initWithRequest:req delegate:self startImmediately:YES];
+    
 }
 
 
@@ -874,4 +878,30 @@ int currentSeq = 0;
 }
 
 
+/*
+- (void) commitToken:(NSString *)token {
+    NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/simplepush.php"];
+    
+    //Put the URL into an USURLRequest
+    NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
+    
+    [req2 setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    [req2 setHTTPMethod:@"POST"];
+    
+    
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    //settingsViewController *svc =[[settingsViewController alloc] init];
+    
+    [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"token=%@&fbid=%@&fullname=%@", token, _myFBID, _fullname] UTF8String] length:strlen([[NSString stringWithFormat:@"token=%@&fbid=%@&fullname=%@", token, _myFBID, _fullname] UTF8String])]];
+
+    
+    //Create a connection
+    connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
+
+}
+*/
+ 
 @end

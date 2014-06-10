@@ -20,7 +20,8 @@
     [FBLoginView class];
     NSSet* set = [NSSet setWithObjects:FBLoggingBehaviorFBRequests, nil];
     [FBSettings setLoggingBehavior:set];
-
+    
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert];
     
     
     return YES;
@@ -75,10 +76,8 @@
   
     if (![self connectedToInternet]) {
         
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game Friend Finder" message:@"Could not find server. Please make sure you are connected to the Internet and try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game Friend Finder" message:@"Could not find server. Please make sure you are connected to the Internet and try again." delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
         [alert show];
-        
     
     }
     
@@ -93,6 +92,36 @@
 {
     NSString *URLString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.apsgames.com"] encoding:NSUTF8StringEncoding error:nil];
     return ( URLString != NULL ) ? YES : NO;
+}
+
+
+
+-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+if (buttonIndex == 0) {
+    UIApplication *app = [UIApplication sharedApplication];
+    [self applicationDidBecomeActive:app];
+}
+    
+            
+    
+}
+
+-(void) application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSUserDefaults *setting = [[NSUserDefaults alloc] init];
+    NSMutableString *tokenString = [NSMutableString stringWithCapacity:[deviceToken length]];
+    [tokenString appendString:deviceToken.description];
+
+    [tokenString replaceOccurrencesOfString:@" " withString:@"" options:nil range:NSMakeRange(0, [tokenString length])];
+    [tokenString replaceOccurrencesOfString:@"<" withString:@"" options:nil range:NSMakeRange(0, [tokenString length])];
+        [tokenString replaceOccurrencesOfString:@">" withString:@"" options:nil range:NSMakeRange(0, [tokenString length])];
+    //NSLog(@"%@", tokenString);
+    [setting setObject:tokenString forKey:@"deviceToken"];
+    
+}
+
+-(void) application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    NSLog(@"%@", error);
 }
 
 

@@ -14,4 +14,7 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) ViewController1 *vc;
 
+
+//-(void) sendProviderDeviceToken:(const void)devTokenBytes;
+
 @end

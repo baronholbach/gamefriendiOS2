@@ -27,6 +27,7 @@
     XBViewController1 *xvc;
     PSViewController *pvc;
     settingsViewController *svc;
+
     NSMutableArray *searchArray;
     int cachedUser;
     
@@ -47,6 +48,7 @@
 @property FBLoginView *loginView;
 @property UIBarButtonItem *nextButton;
 @property UIBarButtonItem *backButton;
+@property NSString *fullname;
 
 
 @property (strong, nonatomic) NSArray *networkOptions;
@@ -65,6 +67,7 @@
 - (void)psNext;
 - (void)psAndXboxBack;
 - (BOOL)connectedToInternet;
+- (void)commitToken:(NSString *)token;
 
 
 

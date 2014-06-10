@@ -156,7 +156,7 @@
             if (![token.PlayStationID isEqualToString:@""]){
 
                 
-                NSString *curName = [[NSString alloc] initWithFormat:@"%@, %@, %@, %@", user.last_name, user.name, user.id, token.PlayStationID];
+                NSString *curName = [[NSString alloc] initWithFormat:@"%@, %@, %@, %@, %@", user.last_name, user.name, user.id, token.PlayStationID, token.FavGame];
                 
                 
                 if(![_sortedFriendInfo containsObject:curName]) {
@@ -211,6 +211,7 @@
     NSLog(@"%@", splitName[2]);
     [psr setMyProfileImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
     [psr setMyID:splitName[3]];
+    [psr setMyGame:splitName[4]];
 }
 
 /*

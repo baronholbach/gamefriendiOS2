@@ -12,9 +12,11 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *idLabel;
+@property (weak, nonatomic) IBOutlet UILabel *gameLabel;
 @property (weak) IBOutlet UIImageView *profileImage;
 @property NSString *myName;
 @property NSString *myID;
+@property NSString *myGame;
 @property UIImage *myProfileImage;
 @property UITableViewCell *prevCell;
 

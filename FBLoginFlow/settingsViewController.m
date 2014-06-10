@@ -98,6 +98,14 @@ static NSUserDefaults *settings;
 
     }
     
+    if ([settings valueForKey:@"gameEntry"]) {
+        _gameEntry.text = [settings stringForKey:@"gameEntry"];
+        _gameEntry.backgroundColor = [UIColor whiteColor];
+        _gameEntry.font = [UIFont boldSystemFontOfSize:20];
+        _gameEntry.textAlignment = NSTextAlignmentCenter;
+        _gameEntry.clearsOnBeginEditing = NO;
+    }
+    
     CALayer *btnLayer = [_fbShare layer];
     [btnLayer setMasksToBounds:YES];
     [btnLayer setCornerRadius:4.0f];
@@ -169,6 +177,27 @@ static NSUserDefaults *settings;
             }
         }
         
+        
+        
+        if (textField == _gameEntry) {
+            
+            if ([settings stringForKey:@"gameEntry"] == NULL) {
+                
+                textField.backgroundColor = [UIColor grayColor];
+                textField.font = [UIFont italicSystemFontOfSize:14];
+                textField.textAlignment = NSTextAlignmentLeft;
+                textField.text = @"Which game are you into?";
+                
+                
+            }
+            
+            else {
+                
+                textField.text = [settings objectForKey:@"gameEntry"];
+            }
+        }
+        
+        
     
     }
     
@@ -215,6 +244,30 @@ static NSUserDefaults *settings;
             
 
         }
+        
+        else if (textField == _gameEntry) {
+            
+            
+            if ([textField.text isEqualToString:[settings stringForKey:@"gameEntry"]]) {
+                _nextGameEntry = textField.text;
+                
+            }
+            else {
+                
+                _nextGameEntry = textField.text;
+                
+                
+                _gameAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Are you sure you want to update Favorite Game?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+                [_gameAlert show];
+                
+            }
+            
+            
+            
+            
+        }
+
+        
     }
     
 
@@ -273,7 +326,7 @@ static NSUserDefaults *settings;
     }
     
     
-        else {  // if you updated the PSN ID box
+        else if ([alertView isEqual:_psAlert]) {  // if you updated the PSN ID box
             
             if (buttonIndex == 1) {
             
@@ -314,6 +367,37 @@ static NSUserDefaults *settings;
             
             
     }
+    
+        else  {  // if you updated the Favorite Game box
+            
+            if (buttonIndex == 1) {
+                
+                [settings setObject:_nextGameEntry forKey:@"gameEntry"];
+                [settings synchronize];
+                
+                NSURL *url2 = [NSURL URLWithString:@"http://www.apsgames.com/gamefinder/submitUserDetails.php"];
+                
+                
+                //Put the URL into an USURLRequest
+                NSMutableURLRequest *req2 = [NSMutableURLRequest requestWithURL:url2];
+                
+                [req2 setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+                
+                [req2 setHTTPMethod:@"POST"];
+                
+                
+                [req2 setHTTPBody:[NSData dataWithBytes:[[NSString stringWithFormat:@"favGame=%@&fbid=%@", [settings objectForKey:@"gameEntry"], fbid] UTF8String] length:strlen([[NSString stringWithFormat:@"favGame=%@&fbid=%@", [settings objectForKey:@"gameEntry"], fbid] UTF8String])]];
+                
+                connection = [[NSURLConnection alloc] initWithRequest:req2 delegate:self startImmediately:YES];
+                _gameEntry.clearsOnBeginEditing = NO;
+            }
+            
+            else if (buttonIndex == 0) {
+                _gameEntry.text = [settings objectForKey:@"gameEntry"];
+            }
+            
+            
+        }
     
 }
 

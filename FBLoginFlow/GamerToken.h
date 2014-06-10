@@ -18,5 +18,6 @@
 @property (nonatomic, strong) NSString *FaceBookID;
 @property (nonatomic, strong) NSString *XBoxID;
 @property (nonatomic, strong) NSString *PlayStationID;
+@property (nonatomic, strong) NSString *FavGame;
 
 @end

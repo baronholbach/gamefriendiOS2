@@ -140,7 +140,8 @@
             if (![token.XBoxID isEqualToString:@""]){
                 
 
-                NSString *curName = [[NSString alloc] initWithFormat:@"%@, %@, %@, %@", user.last_name, user.name, user.id, token.XBoxID];
+                NSString *curName = [[NSString alloc] initWithFormat:@"%@, %@, %@, %@, %@", user.last_name, user.name, user.id, token.XBoxID, token.FavGame];
+
             
                 if(![_sortedFriendInfo containsObject:curName]) {
                     [_sortedFriendInfo addObject:curName];
@@ -203,6 +204,7 @@
     NSLog(@"%@", splitName[2]);
     [xbr setMyProfileImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
     [xbr setMyID:splitName[3]];
+    [xbr setMyGame:splitName[4]];
 
 }
 
